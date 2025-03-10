@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "benchmark",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "inf_llm.chat",
+      "justMyCode": false,
+      "python": "${workspaceFolder}/infllm_venv/bin/python",
+      "args": [
+        "--model-path",
+        "mistralai/Mistral-7B-Instruct-v0.2",
+        "--inf-llm-config-path",
+        "config/mistral-inf-llm.yaml"
+      ]
+    }
+  ]
+}
