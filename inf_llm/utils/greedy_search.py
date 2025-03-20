@@ -22,7 +22,6 @@ class GreedySearch:
 
         return model_inputs
 
-
     def generate(self, text=None, input_ids=None, **kwargs):
         if input_ids is None:
             model_inputs = self._process_texts(text)
@@ -47,6 +46,7 @@ class GreedySearch:
         
         for i in range(max_length + 1):
             if i == 0:
+                # prefill phase
                 if chunk_size is None:
                     chunk_size = input_ids.size(1)
                 for st in range(0, input_ids.size(1) - 1, chunk_size):
@@ -60,6 +60,7 @@ class GreedySearch:
                     )
                     logits, past_key_values = out.logits, out.past_key_values
 
+                # decode phase
                 out = self.model(
                     input_ids = input_ids[:, -1:],
                     attention_mask = attention_mask,

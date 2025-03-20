@@ -8,6 +8,10 @@ import argparse
 from omegaconf import OmegaConf
 from inf_llm.utils import patch_hf, GreedySearch, patch_model_center
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import re
+
+SPECIAL_TOKENS = "[##TAOTIE##]"
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -193,6 +197,27 @@ def post_process(pred, model_name, dataset):
 
     return pred
 
+def find_special_tokens(prompt):
+    matches = [(m.start(), m.end()) for m in re.finditer(re.escape(SPECIAL_TOKENS), prompt)]
+    
+    result = []
+    prev_end = 0
+    for start, end in matches:
+        result.append(prompt[prev_end:start])
+        prev_end = end
+
+    if prev_end < len(prompt):
+        result.append(prompt[prev_end:])
+
+    indices = [value[0] - idx * len(SPECIAL_TOKENS) for idx, value in enumerate(matches)]
+    
+    prompt = ''.join(result)
+    if prompt == "":
+        indices = []  
+    indices = sorted(set(indices))  # Ensure indices are unique and sorted
+    return prompt, indices
+
+
 def get_pred(
     model, tokenizer, data, max_length,
     max_gen, prompt_format, dataset, model_name, 
@@ -235,6 +260,7 @@ def get_pred(
         else:
             add_special_tokens = True
 
+        prompt, sp_index = find_special_tokens(prompt)
         tokenized_prompt = tokenizer(prompt, truncation=False, return_tensors="pt", add_special_tokens=add_special_tokens).input_ids[0]
 
         if truncation is None:
@@ -255,7 +281,6 @@ def get_pred(
             else:
                 raise NotImplementedError
     
-
         
         output = searcher.generate(
             input_ids = tokenized_prompt,

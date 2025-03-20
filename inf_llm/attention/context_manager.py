@@ -42,6 +42,7 @@ class MemoryUnit:
             cpu_data = tuple(_t.contiguous() for _t in kv)
 
         if pin_memory:
+            # malloc the memory 
             cpu_data = tuple(_t.pin_memory() for _t in cpu_data)
 
         if load_to_cache:
@@ -469,7 +470,6 @@ class ContextManager:
                 for s, i in zip(score, global_block_map[u]):
                     self.cached_blocks[u][i] += s
 
-
     
     def _append(
         self,
@@ -492,6 +492,7 @@ class ContextManager:
         with torch.cuda.stream(GLOBAL_STREAM):
             block_topk = self.calc_block_topk(global_q)
             
+            # calc evict block number
             for u in range(self.num_units):
                 num_remove = len(self.cached_blocks[u]) - self.max_cached_block
                 for bidx in block_topk[u]:
@@ -501,6 +502,7 @@ class ContextManager:
                 # update cache
                 self.remove_lru_blocks(u, num_remove, block_topk[u])
 
+            # update the lru time
             if self.cache_strategy == "lru":
                 self.load_count += 1
                 for u in range(self.num_units):
@@ -562,8 +564,6 @@ class ContextManager:
         assert global_h_q.dim() == 4
         assert global_h_q.shape[:2] == (self.num_units, self.unit_size)
         assert global_h_q.shape[3] == self.dim_head
-
-
 
         block_k = torch.cat([self.block_k[u].get_data()[None, :, :] for u in range(self.num_units)], dim=0)
         assert block_k.shape == (self.num_units, self.num_global_block, self.dim_head * self.unit_size)

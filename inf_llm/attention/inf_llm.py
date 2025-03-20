@@ -61,12 +61,13 @@ def inf_llm_forward(
         local_q, local_k, local_v = h_q, h_k, h_v
         global_q, global_k, global_v = h_q, h_k, h_v
 
+        # add the kv to the cache
         o = past_key_value.append(
             local_q, local_k, local_v,
             global_q, global_k, global_v,
         )
 
-
+        # get the attention output
         o = o.view(batch_size, num_heads, len_q, dim_head).permute(0, 2, 1, 3)
         o = o.reshape(batch_size, len_q, dim_head * num_heads)
         o = attention_out(o)
