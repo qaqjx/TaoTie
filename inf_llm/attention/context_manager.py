@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 from typing import Optional, Tuple
 from copy import deepcopy
@@ -193,7 +194,7 @@ class Faiss:
 
 GLOBAL_STREAM = None
 
-
+# TODO: global find the kv cache
 class ContextManager:
     def __init__(self, 
                  position_embedding,
@@ -208,14 +209,13 @@ class ContextManager:
                  faiss: bool = False,
                  perhead: bool = False
     ):
-
         self.length = 0
         self.position_embedding = position_embedding
         self.n_init = n_init
         self.n_local = n_local
         self.block_size = block_size
         self.max_cached_block = max_cached_block
-        self.exc_block_size = exc_block_size
+        self.exc_block_size = exc_block_size # default 512
         self.score_decay = score_decay
         assert exc_block_size <= n_local # no global token in input
         self.topk = topk
@@ -367,6 +367,7 @@ class ContextManager:
     def calc_block_topk(
         self, global_h_q
     ):
+    # calc current block topk
         if not self._use_chunk_topk:
             if self.num_global_block <= self.topk:
                 return [list(range(len(self.global_blocks[0]))) for _ in range(self.num_units)]
@@ -611,6 +612,72 @@ class ContextManager:
          
         return ret
 
+    def offload_ssd(self):
+        # store the global block to ssd by binary format
+        file_name = self.ssd_file_name if self.ssd_file_name else "global_blocks.bin"
+        with open(file_name, "wb") as f:
+            # store the global block
+            f.write(np.array([self.num_units, len(self.global_blocks[0])], dtype=np.int32).tobytes())
+            # Iterate through each unit and block to serialize and store their data
+            for u in range(self.num_units):
+                for memory_unit in self.global_blocks[u]:
+                    # Extract tensors from the MemoryUnit
+                    kv_0 = memory_unit.kv[0].cpu().numpy()  # First tensor (move to CPU if on GPU)
+                    kv_1 = memory_unit.kv[1].cpu().numpy()  # Second tensor (move to CPU if on GPU)
+
+                    # Serialize the shape and data of each tensor
+                    for tensor in [kv_0, kv_1]:
+                        shape = np.array(tensor.shape, dtype=np.int32)
+                        f.write(shape.tobytes())  # Write shape
+                        f.write(tensor.tobytes())  # Write raw data           
+
+    def blend(self, str_hash, indices, partial_k , partial_v):
+
+        # Ensure partial_k and partial_v are lists for easy manipulation
+        partial_k = list(partial_k.split(1, dim=0))  # Split into a list of tensors along the first dimension
+        partial_v = list(partial_v.split(1, dim=0))
+
+        # Load the global block data from the SSD
+        for i,str in enumerate(str_hash):
+            # append to the current ctm 
+            file_name = file_name if file_name else "global_blocks_data"
+            file_name = file_name + str + ".bin"
+            with open(file_name, "rb") as f:
+                # Read the number of units and blocks
+                num_units, num_blocks = np.frombuffer(f.read(8), dtype=np.int32)
+                self.global_blocks = [[] for _ in range(num_units)]
+                # Iterate through each unit and block to deserialize and load their data
+                all_k = []
+                all_v = []
+                for u in range(num_units):
+                    for _ in range(num_blocks):
+                        # Deserialize the shape and data of each tensor
+                        kv_0_shape = np.frombuffer(f.read(4), dtype=np.int32)
+                        kv_0_data = np.frombuffer(f.read(kv_0_shape.prod() * 4), dtype=np.float32).reshape(kv_0_shape)
+                        kv_1_shape = np.frombuffer(f.read(4), dtype=np.int32)
+                        kv_1_data = np.frombuffer(f.read(kv_1_shape.prod() * 4), dtype=np.float32).reshape(kv_1_shape)
+                        k_tensor = torch.tensor(kv_0_data)
+                        v_tensor = torch.tensor(kv_1_data)
+                        
+                        
+                        all_k.append(k_tensor)
+                        all_v.append(v_tensor)
+            # Concatenate all key and value tensors along the appropriate dimension
+            concatenated_k = torch.cat(all_k, dim=0)  # Concatenate along the first dimension
+            concatenated_v = torch.cat(all_v, dim=0)  # Concatenate along the first dimension
+
+            # Insert the concatenated tensors into the correct positions in partial_k and partial_v
+            idx = indices[i]
+            partial_k.insert(idx, concatenated_k.unsqueeze(0))  # Insert as a single-element batch
+            partial_v.insert(idx, concatenated_v.unsqueeze(0))
+        # Concatenate the updated partial_k and partial_v back into single tensors
+        final_k = torch.cat(partial_k, dim=0)
+        final_v = torch.cat(partial_v, dim=0)
+   
+        return final_k, final_v,
+
+    
+
     def append_global(
         self, exc_length, kv_length, local_score
     ):
@@ -686,7 +753,6 @@ class ContextManager:
     ):
         batch_size = local_q.size(0)
         input_length = local_q.size(-2)
-
         if self.perhead:
             num_heads = local_q.size(1)
             num_heads_kv = local_v.size(1)
@@ -778,7 +844,6 @@ class ContextManager:
                 global_q[:, :, st:ed, :]
             )
             o_list.append(chunk_o)
-
 
             # append global
             with torch.cuda.stream(GLOBAL_STREAM):

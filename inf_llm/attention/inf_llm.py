@@ -23,7 +23,8 @@ def inf_llm_forward(
                     use_cache: bool,
                     past_key_value,
                     project_q, project_k, project_v, attention_out, 
-                    dim_head, num_heads, num_heads_kv
+                    dim_head, num_heads, num_heads_kv,
+                    is_blend , cacheblend_indices
     ):
 
         batch_size = query.size(0)
@@ -32,10 +33,19 @@ def inf_llm_forward(
 
         assert use_cache
 
+        if is_blend is True:
+            xx
+
         h_q = project_q(query)             # (batch, len_q, num_heads * dim_head)
         h_k = project_k(key_value)         # (batch, len_k, num_heads * dim_head)
         h_v = project_v(key_value)         # (batch, len_k, num_heads * dim_head)
+       
 
+
+        # TODO check the kv whether reuse 
+        # 1. if the kv is not reused, we can directly use the kv
+        # 2. if the kv is reused, we need to recover the deviation
+        # 3. find the topk kv 
 
         h_q = h_q.view(batch_size, len_q, num_heads, dim_head).permute(0, 2, 1, 3).contiguous()   # (batch, num_heads, len_q, dim_head)
         h_k = h_k.view(batch_size, len_k, num_heads_kv, dim_head).permute(0, 2, 1, 3).contiguous()   # (batch, num_heads_kv, len_k, dim_head)

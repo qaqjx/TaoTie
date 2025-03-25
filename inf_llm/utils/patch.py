@@ -1,7 +1,32 @@
 import torch
 from ..attention import RotaryEmbeddingESM, ATTN_FORWRAD
+import re
+
+
+SPECIAL_TOKENS = "[##TAOTIE##]"
+
+def find_special_tokens(prompt):
+    matches = [(m.start(), m.end()) for m in re.finditer(re.escape(SPECIAL_TOKENS), prompt)]
+    
+    result = []
+    prev_end = 0
+    for start, end in matches:
+        result.append(prompt[prev_end:start])
+        prev_end = end
+
+    if prev_end < len(prompt):
+        result.append(prompt[prev_end:])
+
+    indices = [value[0] - idx * len(SPECIAL_TOKENS) for idx, value in enumerate(matches)]
+    
+    prompt = ''.join(result)
+    if prompt == "":
+        indices = []  
+    indices = sorted(set(indices))  # Ensure indices are unique and sorted
+    return prompt, indices
 
 def huggingface_forward(forward):
+    # inject the blend logic
     def hf_forward(
         self,
         hidden_states: torch.Tensor,
@@ -17,7 +42,8 @@ def huggingface_forward(forward):
             self, hidden_states, hidden_states,
             position_ids, use_cache, past_key_value,
             self.q_proj, self.k_proj, self.v_proj, self.o_proj, 
-            self.head_dim, self.num_heads, self.num_key_value_heads
+            self.head_dim, self.num_heads, self.num_key_value_heads,
+            self.is_blend,self.cacheblend_indices
         )
         if use_cache:
             o, pkv = ret
@@ -91,6 +117,9 @@ def patch_hf(
 
         hidden_states = inputs_embeds
 
+        if self.cacheblend_indices is not None:
+            print("Cacheblend inject patch hf",self.cacheblend_indices )
+
         # decoder layers
         all_hidden_states = () if output_hidden_states else None
         all_self_attns = () if output_attentions else None
@@ -98,7 +127,8 @@ def patch_hf(
         for i, decoder_layer in enumerate(self.layers):
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
-
+            decoder_layer.self_attn.is_blend = self.is_blend
+            decoder_layer.self_attn.cacheblend_indices = self.cacheblend_indices
             layer_outputs = decoder_layer(
                 hidden_states,
                 attention_mask=attention_mask,
@@ -106,6 +136,7 @@ def patch_hf(
                 past_key_value=past_key_values[i] if past_key_values is not None else None,
                 output_attentions=output_attentions,
                 use_cache=use_cache,
+               
             )
 
             hidden_states = layer_outputs[0]

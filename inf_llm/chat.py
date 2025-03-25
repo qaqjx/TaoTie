@@ -42,7 +42,7 @@ from fastchat.serve.cli import (
     add_model_args
 )
 
-from inf_llm.utils import patch_hf
+from inf_llm.utils import patch_hf,find_special_tokens,SPECIAL_TOKENS
 
 @torch.inference_mode()
 def generate_stream(
@@ -76,7 +76,17 @@ def generate_stream(
     logits_processor = prepare_logits_processor(
         temperature, repetition_penalty, top_p, top_k
     )
+
+    # Prepare input_ids
+    prompt, indices = find_special_tokens(prompt)
+    len_prompt = len(prompt)
+
+    is_blend = True if len(indices) == 1 and indices[0] == len_prompt - 8 else False
+    print("indices", indices)
+    print("is_blend", is_blend)
     input_ids = tokenizer(prompt).input_ids
+    model.model.is_blend = is_blend
+    model.model.cacheblend_indices = indices
 
     if model.config.is_encoder_decoder:
         max_src_len = context_len
@@ -123,11 +133,15 @@ def generate_stream(
     sent_interrupt = False
     finish_reason = None
     stopped = False
+    start_time = time.process_time()
+
     for i in range(max_new_tokens):
         if i == 0:  # prefill
+
             out = model(input_ids=start_ids, use_cache=True, past_key_values=past_key_values)
             logits = out.logits
             past_key_values = out.past_key_values
+            end_time = time.process_time()
 
             if logprobs is not None:
                 # Prefull logprobs for the prompt.
@@ -139,6 +153,12 @@ def generate_stream(
                 ):
                     token_logprobs.append(logit[label_id])
         else:  # decoding
+            if i == 1:
+                end_time = time.process_time()
+                elapsed_time = end_time - start_time
+                print(f"CPU Time: {elapsed_time:.6f} seconds")
+                
+
             out = model(
                 input_ids=torch.as_tensor(
                     [[token] if not sent_interrupt else output_ids],
