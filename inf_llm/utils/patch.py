@@ -43,7 +43,8 @@ def huggingface_forward(forward):
             position_ids, use_cache, past_key_value,
             self.q_proj, self.k_proj, self.v_proj, self.o_proj, 
             self.head_dim, self.num_heads, self.num_key_value_heads,
-            self.is_blend,self.cacheblend_indices
+            self.is_blend,self.cacheblend_indices,self.layer_idx,
+            self.hash_str
         )
         if use_cache:
             o, pkv = ret
@@ -129,16 +130,18 @@ def patch_hf(
                 all_hidden_states += (hidden_states,)
             decoder_layer.self_attn.is_blend = self.is_blend
             decoder_layer.self_attn.cacheblend_indices = self.cacheblend_indices
+            decoder_layer.self_attn.hash_str = self.hash_str
+            decoder_layer.self_attn.layer_idx = i
+
             layer_outputs = decoder_layer(
                 hidden_states,
                 attention_mask=attention_mask,
                 position_ids=self.position_bias,
                 past_key_value=past_key_values[i] if past_key_values is not None else None,
                 output_attentions=output_attentions,
-                use_cache=use_cache,
-               
+                use_cache=use_cache,   
             )
-
+            
             hidden_states = layer_outputs[0]
 
             if use_cache:

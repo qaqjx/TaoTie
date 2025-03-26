@@ -19,14 +19,14 @@ def find_special_tokens(prompt):
     prompt = ''.join(result)
     if prompt == "":
         indices = []  
-    indices = sorted(set(indices))  # Ensure indices are unique and sorted
+    # indices = sorted(set(indices))  # Ensure indices are unique and sorted
     return prompt, indices
 
 def test_find_special_tokens():
-    text = "abc[##TAOTIE##]def[##TAOTIE##]ghi[##TAOTIE##]"
+    text = "abc[##TAOTIE##]def[##TAOTIE##][##TAOTIE##]ghi[##TAOTIE##]"
     a , b = find_special_tokens(text)
     assert a == "abcdefghi"
-    assert b == [3, 6, 9]
+    assert b == [3, 6 ,6, 9]
 
 def test_find_special_tokens_2():
     text = "hello"

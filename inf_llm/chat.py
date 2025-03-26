@@ -84,9 +84,15 @@ def generate_stream(
     is_blend = True if len(indices) == 1 and indices[0] == len_prompt - 8 else False
     print("indices", indices)
     print("is_blend", is_blend)
+
+    hash_str = []
+    for idx in range(0, len(indices), 2):
+        hash_str.append(hash(prompt[indices[idx]:indices[idx + 1]]))
+
     input_ids = tokenizer(prompt).input_ids
     model.model.is_blend = is_blend
     model.model.cacheblend_indices = indices
+    model.model.hash_str = hash_str
 
     if model.config.is_encoder_decoder:
         max_src_len = context_len

@@ -612,9 +612,10 @@ class ContextManager:
          
         return ret
 
-    def offload_ssd(self):
+    def offload_ssd(self , hash_str ,layer_idx):
         # store the global block to ssd by binary format
-        file_name = self.ssd_file_name if self.ssd_file_name else "global_blocks.bin"
+        file_name = self.ssd_file_name if self.ssd_file_name else "global_blocks"
+        file_name += hash_str[0] + layer_idx + ".bin"
         with open(file_name, "wb") as f:
             # store the global block
             f.write(np.array([self.num_units, len(self.global_blocks[0])], dtype=np.int32).tobytes())
@@ -631,14 +632,13 @@ class ContextManager:
                         f.write(shape.tobytes())  # Write shape
                         f.write(tensor.tobytes())  # Write raw data           
 
-    def blend(self, str_hash, indices, partial_k , partial_v):
-
+    def blend(self, hash_str, indices, partial_k , partial_v):
         # Ensure partial_k and partial_v are lists for easy manipulation
         partial_k = list(partial_k.split(1, dim=0))  # Split into a list of tensors along the first dimension
         partial_v = list(partial_v.split(1, dim=0))
 
         # Load the global block data from the SSD
-        for i,str in enumerate(str_hash):
+        for i,str in enumerate(hash_str):
             # append to the current ctm 
             file_name = file_name if file_name else "global_blocks_data"
             file_name = file_name + str + ".bin"
@@ -675,8 +675,6 @@ class ContextManager:
         final_v = torch.cat(partial_v, dim=0)
    
         return final_k, final_v,
-
-    
 
     def append_global(
         self, exc_length, kv_length, local_score

@@ -47,6 +47,7 @@ class GreedySearch:
         for i in range(max_length + 1):
             if i == 0:
                 # prefill phase
+                # 
                 if chunk_size is None:
                     chunk_size = input_ids.size(1)
                 for st in range(0, input_ids.size(1) - 1, chunk_size):
