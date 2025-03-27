@@ -44,6 +44,13 @@ from fastchat.serve.cli import (
 
 from inf_llm.utils import patch_hf,find_special_tokens,SPECIAL_TOKENS
 
+import hashlib
+
+def serialize_and_hash(input_list):
+    serialized_data = str(input_list).encode('utf-8')
+    hash_object = hashlib.md5(serialized_data)
+    return hash_object.hexdigest()
+
 @torch.inference_mode()
 def generate_stream(
     model,
@@ -78,18 +85,28 @@ def generate_stream(
     )
 
     # Prepare input_ids
-    prompt, indices = find_special_tokens(prompt)
-    len_prompt = len(prompt)
-
-    is_blend = True if len(indices) == 1 and indices[0] == len_prompt - 8 else False
-    print("indices", indices)
-    print("is_blend", is_blend)
-
-    hash_str = []
-    for idx in range(0, len(indices), 2):
-        hash_str.append(hash(prompt[indices[idx]:indices[idx + 1]]))
-
+    tokenizer.add_special_tokens({"additional_special_tokens": [SPECIAL_TOKENS]})
+    speceial_input_id = tokenizer(SPECIAL_TOKENS).input_ids[-1]
+    
     input_ids = tokenizer(prompt).input_ids
+    indices = [idx for idx,input_id in enumerate(input_ids) if input_id == speceial_input_id]
+    
+    hash_str = []
+    if(len(indices) == 1):
+        hash_str.append(serialize_and_hash(input_ids[4 : -5]))
+    else :
+        for idx in range(0,len(indices),2):
+            hash_str.append(serialize_and_hash(input_ids[indices[idx] + 1 :indices[idx + 1]]))
+
+    indices = [x - i for i, x in enumerate(indices) ]
+    input_ids = [x for x in input_ids if x != speceial_input_id]
+    
+    is_blend = True if len(indices) != 0  else False
+    # print("is_blend", is_blend)
+
+    if len(indices) == 1:
+        input_ids = input_ids[4:-4]
+    
     model.model.is_blend = is_blend
     model.model.cacheblend_indices = indices
     model.model.hash_str = hash_str
@@ -145,6 +162,8 @@ def generate_stream(
         if i == 0:  # prefill
 
             out = model(input_ids=start_ids, use_cache=True, past_key_values=past_key_values)
+            model.model.cacheblend_indices = []
+            model.model.is_blend = False
             logits = out.logits
             past_key_values = out.past_key_values
             end_time = time.process_time()

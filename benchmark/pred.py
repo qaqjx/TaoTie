@@ -6,7 +6,7 @@ import json
 from tqdm import tqdm
 import argparse
 from omegaconf import OmegaConf
-from inf_llm.utils import patch_hf, GreedySearch, patch_model_center,find_special_tokens
+from inf_llm.utils import patch_hf, GreedySearch, patch_model_center, find_special_tokens
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import re
 

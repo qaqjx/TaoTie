@@ -1,26 +1,7 @@
 import  re
-
+from inf_llm.utils import find_special_tokens,SPECIAL_TOKENS
 SPECIAL_TOKENS = "[##TAOTIE##]"
 
-def find_special_tokens(prompt):
-    matches = [(m.start(), m.end()) for m in re.finditer(re.escape(SPECIAL_TOKENS), prompt)]
-    
-    result = []
-    prev_end = 0
-    for start, end in matches:
-        result.append(prompt[prev_end:start])
-        prev_end = end
-
-    if prev_end < len(prompt):
-        result.append(prompt[prev_end:])
-
-    indices = [value[0] - idx * len(SPECIAL_TOKENS) for idx, value in enumerate(matches)]
-    
-    prompt = ''.join(result)
-    if prompt == "":
-        indices = []  
-    # indices = sorted(set(indices))  # Ensure indices are unique and sorted
-    return prompt, indices
 
 def test_find_special_tokens():
     text = "abc[##TAOTIE##]def[##TAOTIE##][##TAOTIE##]ghi[##TAOTIE##]"
@@ -45,6 +26,12 @@ def test_find_special_tokens_4():
     a , b = find_special_tokens(text)
     assert a == "hello"
     assert b == [5]
+
+def test_find_special_tokens_6():
+    text = "hello[##TAOTIE##]hello[##TAOTIE##]hello"
+    a , b = find_special_tokens(text)
+    assert a == "hellohellohello"
+    assert b == [5,10]
 
 def test_find_special_tokens_5():
     text = "[##TAOTIE##][##TAOTIE##]"

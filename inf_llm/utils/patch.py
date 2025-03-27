@@ -22,7 +22,7 @@ def find_special_tokens(prompt):
     prompt = ''.join(result)
     if prompt == "":
         indices = []  
-    indices = sorted(set(indices))  # Ensure indices are unique and sorted
+    # indices = sorted(set(indices))  # Ensure indices are unique and sorted
     return prompt, indices
 
 def huggingface_forward(forward):
@@ -44,7 +44,7 @@ def huggingface_forward(forward):
             self.q_proj, self.k_proj, self.v_proj, self.o_proj, 
             self.head_dim, self.num_heads, self.num_key_value_heads,
             self.is_blend,self.cacheblend_indices,self.layer_idx,
-            self.hash_str
+            self.hash_str,self.recompute_idx
         )
         if use_cache:
             o, pkv = ret
@@ -118,13 +118,13 @@ def patch_hf(
 
         hidden_states = inputs_embeds
 
-        if self.cacheblend_indices is not None:
-            print("Cacheblend inject patch hf",self.cacheblend_indices )
+        if self.cacheblend_indices is  None:
+            print("Not Cacheblend inject patch hf",self.cacheblend_indices)
 
         # decoder layers
         all_hidden_states = () if output_hidden_states else None
         all_self_attns = () if output_attentions else None
-
+        recompute_idx = [i for i in range(seq_length)]
         for i, decoder_layer in enumerate(self.layers):
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
@@ -132,6 +132,7 @@ def patch_hf(
             decoder_layer.self_attn.cacheblend_indices = self.cacheblend_indices
             decoder_layer.self_attn.hash_str = self.hash_str
             decoder_layer.self_attn.layer_idx = i
+            decoder_layer.self_attn.recompute_idx = recompute_idx
 
             layer_outputs = decoder_layer(
                 hidden_states,
@@ -141,7 +142,7 @@ def patch_hf(
                 output_attentions=output_attentions,
                 use_cache=use_cache,   
             )
-            
+
             hidden_states = layer_outputs[0]
 
             if use_cache:
