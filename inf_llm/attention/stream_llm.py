@@ -69,6 +69,7 @@ def stream_llm_forward(n_local, n_init, fattn: bool = False, *args, **kwargs):
             init_h_q = position_bias.apply_rotary_pos_emb_one_angle(
                 h_q, n_local + n_init
             )
+            # TODO use the current rope 
             init_h_k = position_bias.apply_rotary_pos_emb(
                 h_k[:, :, :n_init, :].contiguous(), 
                 n_init, n_init, position_bias._cos_cached, position_bias._sin_cached

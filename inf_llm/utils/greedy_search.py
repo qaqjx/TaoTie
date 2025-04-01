@@ -1,4 +1,6 @@
 import torch
+import time
+
 
 class GreedySearch:
     def __init__(self, model, tokenizer):
@@ -43,15 +45,34 @@ class GreedySearch:
         past_key_values = self.past_kv
         if output:
             output_text = ""
-        
+
+        self.model.model.is_blend = self.model.is_blend
+        # self.model.model.hash_str = self.model.hash_str
+
+        start = time.time()  
         for i in range(max_length + 1):
             if i == 0:
                 # prefill phase
-                # 
                 if chunk_size is None:
                     chunk_size = input_ids.size(1)
+                
+                # segmentation
                 for st in range(0, input_ids.size(1) - 1, chunk_size):
                     ed = min(input_ids.size(1) - 1, st + chunk_size)
+                    cb_indices = []
+                    st_hash_idx = 10000000
+                    ed_hash_idx = 0
+                    for i in range(len(self.model.hash_str)):
+                        if (self.model.cacheblend_indices[2 * i] > ed or self.model.cacheblend_indices[2 * i + 1] < st) is False:
+                            st_hash_idx = min(st_hash_idx,i)
+                            ed_hash_idx = max(ed_hash_idx,i)
+                            # find the slotting idx
+                            slot_st = max(self.model.cacheblend_indices[2 * i], st)
+                            slot_ed = min(self.model.cacheblend_indices[2 * i + 1], ed)
+                            cb_indices.append([[slot_st - st, slot_ed - st],[slot_st, slot_ed]])
+                    
+
+                    self.model.model.hash_str = self.model.hash_str[st_hash_idx : ed_hash_idx]
                     out = self.model(
                         input_ids = input_ids[:, st: ed],
                         attention_mask = attention_mask[:, :ed],
@@ -60,6 +81,8 @@ class GreedySearch:
                         past_key_values = past_key_values
                     )
                     logits, past_key_values = out.logits, out.past_key_values
+                self.model.model.is_blend = 0
+                self.model.model.hash_str = []
 
                 # decode phase
                 out = self.model(
@@ -70,6 +93,8 @@ class GreedySearch:
                     past_key_values = past_key_values
                 )
                 logits, past_key_values = out.logits, out.past_key_values
+                end = time.time()  
+                eplised = end - start
             else:
                 out = self.model(
                     input_ids = input_ids[:, -1:],
@@ -79,7 +104,7 @@ class GreedySearch:
                     return_dict = True
                 )
                 logits, past_key_values = out.logits, out.past_key_values
-
+            
             logits = logits[:, -1, :]
             word = logits.argmax(dim=-1)
             if word.item() in end_token_ids or i == max_length:
@@ -104,4 +129,4 @@ class GreedySearch:
             sys.stdout.write("\n")
             sys.stdout.flush()
 
-        return [self.tokenizer.decode(input_ids.squeeze(0)[length:])]
+        return [self.tokenizer.decode(input_ids.squeeze(0)[length:]),eplised]

@@ -1,4 +1,5 @@
 # https://github.com/THUDM/LongBench/blob/main/pred.py
+import hashlib
 import os
 from datasets import load_from_disk
 import torch
@@ -8,8 +9,13 @@ import argparse
 from omegaconf import OmegaConf
 from inf_llm.utils import patch_hf, GreedySearch, patch_model_center, find_special_tokens
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import re
 
+from inf_llm.utils.patch import SPECIAL_TOKENS
+
+def serialize_and_hash(input_list):
+    serialized_data = str(input_list).encode('utf-8')
+    hash_object = hashlib.md5(serialized_data)
+    return hash_object.hexdigest()
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -40,7 +46,6 @@ def parse_args():
     for d in datasets_list:
         conf.datasets.append(d.strip())
     return conf
-
 
 def get_model_and_tokenizer(config):
     tokenizer = AutoTokenizer.from_pretrained(config.tokenizer_path)
@@ -207,7 +212,7 @@ def get_pred(
 
     if world_size is not None:
         data = data[rank::world_size]
-
+    model.is_blend = 0
     searcher = GreedySearch(model, tokenizer)
     cur = 0
     total = len(data)
@@ -237,9 +242,32 @@ def get_pred(
         else:
             add_special_tokens = True
 
-        prompt, sp_index = find_special_tokens(prompt)
-        searcher.sp_index = sp_index
+        # add the special token.
+        tokenizer.add_special_tokens({"additional_special_tokens": [SPECIAL_TOKENS]})
         tokenized_prompt = tokenizer(prompt, truncation=False, return_tensors="pt", add_special_tokens=add_special_tokens).input_ids[0]
+        spec_id = tokenizer(SPECIAL_TOKENS).input_ids[-1]
+        
+        indices = [idx for idx,input_id in enumerate(tokenized_prompt) if input_id == spec_id]
+        hash_str = []
+        if(len(indices) == 1):
+            hash_str.append(serialize_and_hash(tokenized_prompt[4 : -5]))
+        else :
+            for idx in range(0,len(indices),2):
+                hash_str.append(serialize_and_hash(tokenized_prompt[indices[idx] + 1 :indices[idx + 1]]))
+        model.hash_str = hash_str
+
+        spec_count = (tokenized_prompt == spec_id).sum().item()
+        if spec_count == 0:
+            model.is_blend = 0
+        elif spec_count == 1:
+            model.is_blend = 2
+        else:
+            model.is_blend = 1
+
+        indices = [x - i for i, x in enumerate(indices) ]
+
+        model.cacheblend_indices = indices
+        tokenized_prompt = [x for x in tokenized_prompt if x != spec_id]
 
         if truncation is None:
             if len(tokenized_prompt) > max_length - max_gen:
@@ -267,8 +295,11 @@ def get_pred(
             extra_end_token_ids=extra_end_token_ids
         )
 
+        TTFT = output[-1]
+        output = output[:-1]
+
         pred = post_process(output[0], model_name, dataset)
-        preds.append({"pred": pred, "answers": json_obj["answers"], "all_classes": json_obj["all_classes"], "length": json_obj["length"], "token_length": len(tokenized_prompt) + max_gen})
+        preds.append({"pred": pred, "answers": json_obj["answers"], "all_classes": json_obj["all_classes"], "length": json_obj["length"], "token_length": len(tokenized_prompt) + max_gen,"TTFT": TTFT})
         searcher.clear()
         cur += 1
         if verbose:
@@ -293,7 +324,6 @@ if __name__ == '__main__':
     output_dir_path = args.output_dir_path
 
     datasets = args.datasets
-
 
     # we design specific prompt format and max generation length for each task, feel free to modify them to optimize model output
     dataset2prompt = json.load(open("benchmark/config/dataset2prompt.json", "r"))

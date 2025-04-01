@@ -101,8 +101,7 @@ def generate_stream(
     indices = [x - i for i, x in enumerate(indices) ]
     input_ids = [x for x in input_ids if x != speceial_input_id]
     
-    is_blend = True if len(indices) != 0  else False
-    # print("is_blend", is_blend)
+    is_blend = 2 if len(indices) != 0  else 0
 
     if len(indices) == 1:
         input_ids = input_ids[4:-4]
@@ -163,7 +162,7 @@ def generate_stream(
 
             out = model(input_ids=start_ids, use_cache=True, past_key_values=past_key_values)
             model.model.cacheblend_indices = []
-            model.model.is_blend = False
+            model.model.is_blend = 0
             logits = out.logits
             past_key_values = out.past_key_values
             end_time = time.process_time()

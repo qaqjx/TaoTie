@@ -26,6 +26,61 @@ class CudaCache:
         assert idx not in self.idle_set
         self.idle_set.add(idx)
 
+class CPUCache:
+    def __init__(self):
+        self.kv = dict()
+
+    def find(self , filename):
+        if filename in self.kv:
+            return self.kv[filename]
+    
+        return None
+        
+    def insert(self, filename, data):
+        self.kv[filename] = data
+    
+    def get_kv(self, filename, slot_st = 0, slot_ed = -1):
+        if self.find(filename) is None:
+            k,v = self.load_ssd(filename)
+            self.insert(filename, [k,v])
+        
+        return self.kv[filename][0][:,:,slot_st:slot_ed,:], self.kv[filename][1][:,:,slot_st:slot_ed,:]
+    
+    def load_ssd(self , file_name):
+        with open(file_name, "rb") as f:        
+            # Read the number of units and blocks
+            num_units, num_blocks, remainder_num = np.frombuffer(f.read(12), dtype=np.int32)
+            # Iterate through each unit and block to deserialize and load their data
+            all_k = []
+            all_v = []
+            for u in range(num_units):
+                for _ in range(num_blocks):
+                    # Deserialize the shape and data of each tensor
+                    kv_0_shape = np.frombuffer(f.read(16), dtype=np.int32)
+                    kv_0_data = np.frombuffer(f.read(kv_0_shape.prod() * 2), dtype=torch.float16).reshape(kv_0_shape)
+                    kv_1_shape = np.frombuffer(f.read(16), dtype=np.int32)
+                    kv_1_data = np.frombuffer(f.read(kv_1_shape.prod() * 2), dtype=torch.float16).reshape(kv_1_shape)
+                    k_tensor = torch.tensor(kv_0_data)
+                    v_tensor = torch.tensor(kv_1_data)
+                    
+                    
+                    all_k.append(k_tensor)
+                    all_v.append(v_tensor)
+            
+                    # Deserialize the remainder tensors (key and value)
+            key_shape = np.frombuffer(f.read(4 * 4), dtype=np.int32)
+            key_data = np.frombuffer(f.read(key_shape.prod() * 2), dtype=np.float16).reshape(key_shape)
+            value_shape = np.frombuffer(f.read(4 * 4), dtype=np.int32)
+            value_data = np.frombuffer(f.read(value_shape.prod() * 2), dtype=np.float16).reshape(value_shape)
+
+            # Convert remainder tensors to PyTorch tensors
+            key_tensor = torch.tensor(key_data)
+            value_tensor = torch.tensor(value_data)
+
+            # Concatenate all key and value tensors along the appropriate dimension
+            concatenated_k = torch.cat(all_k + [key_tensor], dim=2) # Concatenate along the first dimension
+            concatenated_v = torch.cat(all_v + [value_tensor], dim=2)  # Concatenate along the first dimension
+        return concatenated_k, concatenated_v
 
 class MemoryUnit:
     def __init__(
@@ -194,7 +249,6 @@ class Faiss:
 
 GLOBAL_STREAM = None
 
-# TODO: global find the kv cache
 class ContextManager:
     def __init__(self, 
                  position_embedding,
@@ -230,6 +284,7 @@ class ContextManager:
         self.pin_memory = pin_memory
         self.faiss = faiss
         self.perhead = perhead
+        self.cpucache = CPUCache()
 
         global GLOBAL_STREAM
         if self.async_global_stream and GLOBAL_STREAM is None:
@@ -384,7 +439,6 @@ class ContextManager:
 
         return ret
 
-
     def get_global_hidden_and_mask(
         self, len_q, block_topk
     ):
@@ -452,7 +506,6 @@ class ContextManager:
         global_h_v = global_h_v[:, :, :ed, :]
         return global_h_k, global_h_v, sliding_window, global_block_map, block_num
 
-
     def update_block_score(
         self, global_score: torch.FloatTensor, global_block_map, global_block_num
     ):
@@ -470,17 +523,16 @@ class ContextManager:
                 assert len(score) >= len(global_block_map[u])
                 for s, i in zip(score, global_block_map[u]):
                     self.cached_blocks[u][i] += s
-
     
     def _append(
         self,
         local_q, local_k, local_v, global_q
     ):
-
         # get local_h_q, local_h_k, local_h_v
+        # rotary the q v
+        # TODO achieve the correct rotary position
         local_h_q, local_h_k = self.position_embedding(local_q, local_k)
         local_h_v = local_v
-
 
         # calc local result first to overlap host-device communication
         attn = self.Attn(local_h_q.shape, local_h_q.dtype, local_h_q.device)
@@ -546,7 +598,6 @@ class ContextManager:
 
 
         return o.view((self.batch_size, self.num_heads, -1, self.dim_head)), loc_score
-
 
     def get_batched_topk(self, global_q):
         length = global_q.shape[2]
@@ -639,51 +690,20 @@ class ContextManager:
                 f.write(shape.tobytes())
                 f.write(tensor.tobytes())
 
-    def blend(self, hash_str, indices, partial_k , partial_v,layer_idx):
-
+    def blend(self, hash_str, indices, partial_k , partial_v , layer_idx):
         # Load the global block data from the SSD
-        for i,hash_s in enumerate(hash_str):
+        for i, hash_s in enumerate(hash_str):
+            filename =  "kvcache/global_blocks_data" + str(hash_s) + "layer_"+ str(layer_idx) + ".bin"
+
             # append to the current ctm 
-            file_name =  "kvcache/global_blocks_data" + str(hash_s) + "layer_"+ str(layer_idx) + ".bin"
+            k, v = self.cpucache.get_kv(filename)
 
-            with open(file_name, "rb") as f:
-                # Read the number of units and blocks
-                num_units, num_blocks, remainder_num = np.frombuffer(f.read(12), dtype=np.int32)
-                # Iterate through each unit and block to deserialize and load their data
-                all_k = []
-                all_v = []
-                for u in range(num_units):
-                    for _ in range(num_blocks):
-                        # Deserialize the shape and data of each tensor
-                        kv_0_shape = np.frombuffer(f.read(16), dtype=np.int32)
-                        kv_0_data = np.frombuffer(f.read(kv_0_shape.prod() * 2), dtype=torch.float16).reshape(kv_0_shape)
-                        kv_1_shape = np.frombuffer(f.read(16), dtype=np.int32)
-                        kv_1_data = np.frombuffer(f.read(kv_1_shape.prod() * 2), dtype=torch.float16).reshape(kv_1_shape)
-                        k_tensor = torch.tensor(kv_0_data)
-                        v_tensor = torch.tensor(kv_1_data)
-                        
-                        
-                        all_k.append(k_tensor)
-                        all_v.append(v_tensor)
-                
-                        # Deserialize the remainder tensors (key and value)
-                key_shape = np.frombuffer(f.read(4 * 4), dtype=np.int32)
-                key_data = np.frombuffer(f.read(key_shape.prod() * 2), dtype=np.float16).reshape(key_shape)
-                value_shape = np.frombuffer(f.read(4 * 4), dtype=np.int32)
-                value_data = np.frombuffer(f.read(value_shape.prod() * 2), dtype=np.float16).reshape(value_shape)
-
-                # Convert remainder tensors to PyTorch tensors
-                key_tensor = torch.tensor(key_data)
-                value_tensor = torch.tensor(value_data)
-
-                # Concatenate all key and value tensors along the appropriate dimension
-                concatenated_k = torch.cat(all_k + [key_tensor], dim=2).to(partial_k.device) # Concatenate along the first dimension
-                concatenated_v = torch.cat(all_v + [value_tensor], dim=2).to(partial_v.device)  # Concatenate along the first dimension
-
-                # Insert the concatenated tensors into the correct positions in partial_k and partial_v
-                idx = indices[i * 2]
-                partial_k = torch.cat([partial_k[:,:,:idx,:], concatenated_k , partial_k[: , : , idx: , :]] ,dim = 2)  # Insert as a single-element batch
-                partial_v = torch.cat([partial_v[:,:,:idx,:], concatenated_v , partial_v[: , : , idx: , :]] ,dim = 2)  # Insert as a single-element batch   
+            k.to(partial_k.device)
+            v.to(partial_v.device)
+            # Insert the concatenated tensors into the correct positions in partial_k and partial_v
+            idx = indices[i * 2]
+            partial_k = torch.cat([partial_k[:,:,:idx,:], k , partial_k[: , : , idx: , :]] ,dim = 2)  # Insert as a single-element batch
+            partial_v = torch.cat([partial_v[:,:,:idx,:], v , partial_v[: , : , idx: , :]] ,dim = 2)  # Insert as a single-element batch   
         return partial_k, partial_v
 
     def append_global(

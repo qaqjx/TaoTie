@@ -133,7 +133,7 @@ if __name__ == '__main__':
             predictions, answers, lengths = [], [], []
             dataset = filename.split('.')[0]
             with open(os.path.join(path, filename), "r", encoding="utf-8") as f:
-                for line in f:
+                for i,line in enumerate(f):
                     data = json.loads(line)
                     predictions.append(data["pred"])
                     answers.append(data["answers"])

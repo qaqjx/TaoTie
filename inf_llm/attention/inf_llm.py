@@ -50,13 +50,10 @@ def inf_llm_forward(
                 perhead
             )
 
-        if len(cacheblend_indices)  == 1:
-            is_blend = False
-
         token_num = query.shape[1]
 
         # divide the token for blend
-        if is_blend is True and  layer_idx != 0:
+        if is_blend == 1 and  layer_idx != 0:
             kv_c = []
             kv_c.append(key_value[ :, :cacheblend_indices[0],:])
             for idx in range(1 , len(cacheblend_indices) - 1, 2):
@@ -78,7 +75,7 @@ def inf_llm_forward(
         #  check the kv whether reuse 
         # 1. if the kv is not reused, we can directly use the kv
         # 2. if the kv is reused, we need to recover the deviation
-        if is_blend is True and layer_idx >= 1: 
+        if is_blend == 1 and layer_idx >= 1: 
             # retrieval the kv cache
             h_k, h_v = past_key_value.blend(hash_str, cacheblend_indices, h_k, h_v ,layer_idx)
             # Convert recompute_idx from list to tensor
@@ -112,7 +109,7 @@ def inf_llm_forward(
         )
 
         # store the kv cache of precompute pharse
-        if len(cacheblend_indices) == 1:
+        if is_blend == 2:
             past_key_value.offload_ssd(hash_str,layer_idx)
 
         # get the attention output

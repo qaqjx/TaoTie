@@ -86,6 +86,7 @@ def patch_hf(
         *args,
         **kwargs
     ):
+        
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
@@ -105,6 +106,13 @@ def patch_hf(
             raise ValueError("You have to specify either decoder_input_ids or decoder_inputs_embeds")
 
         if inputs_embeds is None:
+
+            cacheblend_indices = None
+            # TODO ensure the reuse idx and slotting
+            # 1. a variable to store the reuse idx
+            # 2. a variable to store the slotting idx
+            # 3. a variable to store the hash str
+
             inputs_embeds = self.embed_tokens(input_ids)
             if hasattr(self, "config") and hasattr(self.config, "scale_emb"):
                 inputs_embeds = inputs_embeds * self.config.scale_emb
@@ -115,21 +123,18 @@ def patch_hf(
         else:
             pkv = None
             
-
         hidden_states = inputs_embeds
-
-        if self.cacheblend_indices is  None:
-            print("Not Cacheblend inject patch hf",self.cacheblend_indices)
 
         # decoder layers
         all_hidden_states = () if output_hidden_states else None
         all_self_attns = () if output_attentions else None
         recompute_idx = [i for i in range(seq_length)]
+
         for i, decoder_layer in enumerate(self.layers):
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
             decoder_layer.self_attn.is_blend = self.is_blend
-            decoder_layer.self_attn.cacheblend_indices = self.cacheblend_indices
+            decoder_layer.self_attn.cacheblend_indices = cacheblend_indices
             decoder_layer.self_attn.hash_str = self.hash_str
             decoder_layer.self_attn.layer_idx = i
             decoder_layer.self_attn.recompute_idx = recompute_idx
@@ -146,6 +151,7 @@ def patch_hf(
             hidden_states = layer_outputs[0]
 
             if use_cache:
+                # store the past key value by contextmanager
                 _cache = layer_outputs[2 if output_attentions else 1]
                 pkv = pkv + (_cache,)
 

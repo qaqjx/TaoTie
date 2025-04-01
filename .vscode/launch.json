@@ -13,6 +13,28 @@
         "--inf-llm-config-path",
         "config/mistral-inf-llm.yaml"
       ]
+    },
+    {
+      "name": "infinite",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "benchmark/pred.py",
+      "justMyCode": false,
+      "args": [
+        "--config_path",
+        "config/mistral-inf-llm.yaml",
+        "--output_dir_path",
+        "benchmark/infinite-bench-result-cb",
+        "--datasets",
+        "kv_retrieval"
+      ],
+    },
+    {
+      "name": "test",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "test/test_cb.py",
+      "justMyCode": false,
     }
   ]
 }
