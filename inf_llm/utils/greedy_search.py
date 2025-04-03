@@ -62,17 +62,21 @@ class GreedySearch:
                     cb_indices = []
                     st_hash_idx = 10000000
                     ed_hash_idx = 0
-                    for i in range(len(self.model.hash_str)):
-                        if (self.model.cacheblend_indices[2 * i] > ed or self.model.cacheblend_indices[2 * i + 1] < st) is False:
-                            st_hash_idx = min(st_hash_idx,i)
-                            ed_hash_idx = max(ed_hash_idx,i)
-                            # find the slotting idx
-                            slot_st = max(self.model.cacheblend_indices[2 * i], st)
-                            slot_ed = min(self.model.cacheblend_indices[2 * i + 1], ed)
-                            cb_indices.append([[slot_st - st, slot_ed - st],[slot_st, slot_ed]])
+                    if self.model.model.is_blend == 1:
+                        for i in range(len(self.model.hash_str)):
+                            if (self.model.cacheblend_indices[2 * i] > ed or self.model.cacheblend_indices[2 * i + 1] < st) is False:
+                                st_hash_idx = min(st_hash_idx,i)
+                                ed_hash_idx = max(ed_hash_idx,i)
+                                # find the slotting idx
+                                slot_st = max(self.model.cacheblend_indices[2 * i], st)
+                                slot_ed = min(self.model.cacheblend_indices[2 * i + 1], ed)
+                                cb_indices.append([slot_st - st, slot_ed - st, slot_st - self.model.cacheblend_indices[2 * i] , slot_ed - self.model.cacheblend_indices[2 * i]])
                     
-
-                    self.model.model.hash_str = self.model.hash_str[st_hash_idx : ed_hash_idx]
+                        self.model.model.cacheblend_indices = cb_indices
+                        self.model.model.hash_str = self.model.hash_str[st_hash_idx : ed_hash_idx + 1]
+                    else:
+                        self.model.model.cacheblend_indices = []
+                        self.model.model.hash_str = self.model.hash_str
                     out = self.model(
                         input_ids = input_ids[:, st: ed],
                         attention_mask = attention_mask[:, :ed],

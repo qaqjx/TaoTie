@@ -27,7 +27,7 @@ def get_pred(
         prompt = prompt[rank::world_size]
     model.is_blend = 0
     searcher = GreedySearch(model, tokenizer)
-
+    
     # add the special token.
     tokenizer.add_special_tokens({"additional_special_tokens": [SPECIAL_TOKENS]})
     tokenized_prompt = tokenizer(prompt, truncation=False, return_tensors="pt").input_ids[0]
@@ -39,7 +39,7 @@ def get_pred(
         hash_str.append(serialize_and_hash(tokenized_prompt[4 : -5]))
     else :
         for idx in range(0,len(indices),2):
-            hash_str.append(serialize_and_hash(tokenized_prompt[indices[idx] + 1 :indices[idx + 1]]))
+            hash_str.append(serialize_and_hash(tokenized_prompt[indices[idx] + 1 : indices[idx + 1] ]))
     model.hash_str = hash_str
 
     spec_count = (tokenized_prompt == spec_id).sum().item()
@@ -70,10 +70,7 @@ def get_pred(
     print("Pred:", output)
     print("")
 
-
     return preds
-
-
 
 if __name__ == '__main__':
     inf_llm_config_path = "/home/xujie/TaoTie/config/mistral-inf-llm.yaml"
@@ -91,8 +88,10 @@ if __name__ == '__main__':
 
       if(input_text == "exit"):
         break
-      
-      prompt = "<s>" + input_text + "</s>"
+
+      prompt = "[INST]" + input_text + "[/INST]"
 
       preds = get_pred(model, tokenizer, prompt,
                       args.max_len,100, verbose=True)
+
+## [##TAOTIE##] who are u ？

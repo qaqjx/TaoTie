@@ -106,13 +106,6 @@ def patch_hf(
             raise ValueError("You have to specify either decoder_input_ids or decoder_inputs_embeds")
 
         if inputs_embeds is None:
-
-            cacheblend_indices = None
-            # TODO ensure the reuse idx and slotting
-            # 1. a variable to store the reuse idx
-            # 2. a variable to store the slotting idx
-            # 3. a variable to store the hash str
-
             inputs_embeds = self.embed_tokens(input_ids)
             if hasattr(self, "config") and hasattr(self.config, "scale_emb"):
                 inputs_embeds = inputs_embeds * self.config.scale_emb
@@ -134,7 +127,7 @@ def patch_hf(
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
             decoder_layer.self_attn.is_blend = self.is_blend
-            decoder_layer.self_attn.cacheblend_indices = cacheblend_indices
+            decoder_layer.self_attn.cacheblend_indices = self.cacheblend_indices
             decoder_layer.self_attn.hash_str = self.hash_str
             decoder_layer.self_attn.layer_idx = i
             decoder_layer.self_attn.recompute_idx = recompute_idx

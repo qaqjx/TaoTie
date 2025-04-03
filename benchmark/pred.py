@@ -247,7 +247,7 @@ def get_pred(
         tokenized_prompt = tokenizer(prompt, truncation=False, return_tensors="pt", add_special_tokens=add_special_tokens).input_ids[0]
         spec_id = tokenizer(SPECIAL_TOKENS).input_ids[-1]
         
-        indices = [idx for idx,input_id in enumerate(tokenized_prompt) if input_id == spec_id]
+        indices = [idx for idx, input_id in enumerate(tokenized_prompt) if input_id == spec_id]
         hash_str = []
         if(len(indices) == 1):
             hash_str.append(serialize_and_hash(tokenized_prompt[4 : -5]))
@@ -266,7 +266,7 @@ def get_pred(
 
         indices = [x - i for i, x in enumerate(indices) ]
 
-        model.cacheblend_indices = indices
+        model.cacheblend_indices = [ [indices[i] ,indices[i + 1]] for i in range(0,len(indices),2) ]
         tokenized_prompt = [x for x in tokenized_prompt if x != spec_id]
 
         if truncation is None:

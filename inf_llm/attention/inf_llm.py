@@ -55,11 +55,11 @@ def inf_llm_forward(
         # divide the token for blend
         if is_blend == 1 and  layer_idx != 0:
             kv_c = []
-            kv_c.append(key_value[ :, :cacheblend_indices[0],:])
-            for idx in range(1 , len(cacheblend_indices) - 1, 2):
-                if cacheblend_indices[idx] != cacheblend_indices[idx + 1]:
-                    kv_c.append(key_value[ :, cacheblend_indices[idx]:cacheblend_indices[idx + 1],:])
-            kv_c.append(key_value[ :, cacheblend_indices[-1]:,:])               
+            kv_c.append(key_value[ :, :cacheblend_indices[0][0],:])
+            for idx in range(1 , len(cacheblend_indices) - 1):
+                if cacheblend_indices[idx][0] != cacheblend_indices[idx - 1][1]:
+                    kv_c.append(key_value[ :, cacheblend_indices[idx - 1][1]:cacheblend_indices[idx][0],:])
+            kv_c.append(key_value[ :, cacheblend_indices[-1][1]:,:])               
             key_value = torch.cat(kv_c,dim = 1)
 
         h_q = project_q(query)             # (batch, len_q, num_heads * dim_head)
@@ -77,7 +77,7 @@ def inf_llm_forward(
         # 2. if the kv is reused, we need to recover the deviation
         if is_blend == 1 and layer_idx >= 1: 
             # retrieval the kv cache
-            h_k, h_v = past_key_value.blend(hash_str, cacheblend_indices, h_k, h_v ,layer_idx)
+            h_k, h_v = past_key_value.blend(hash_str, cacheblend_indices, h_k, h_v, layer_idx)
             # Convert recompute_idx from list to tensor
             recompute_idx_tensor = torch.tensor(recompute_idx, dtype=torch.long, device = h_k.device)
             # recover the kv cache
