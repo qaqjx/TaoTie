@@ -702,7 +702,6 @@ class ContextManager:
             k = k.to(partial_k.device)
             v = v.to(partial_v.device)
             # Insert the concatenated tensors into the correct positions in partial_k and partial_v
-            
             partial_k = torch.cat([partial_k[:,:,:idx[0],:], k , partial_k[: , : , idx[0]: , :]] ,dim = 2)  # Insert as a single-element batch
             partial_v = torch.cat([partial_v[:,:,:idx[0],:], v , partial_v[: , : , idx[0]: , :]] ,dim = 2)  # Insert as a single-element batch   
         return partial_k, partial_v

@@ -1,11 +1,12 @@
 import json
 import argparse
+import os
 import torch
 from benchmark.pred import serialize_and_hash
 from inf_llm.utils import patch_hf, GreedySearch, patch_model_center, find_special_tokens
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from inf_llm.utils.patch import SPECIAL_TOKENS
-from utils_exp import combine_contexts, normalize_context
+from utils_exp import load_dataset, normalize_question, build_qa_prompt, compute_f1
 
 
 
@@ -66,15 +67,21 @@ def get_pred(
     TTFT = output[-1]
     output = output[:-1]
     searcher.clear()
-    print("Length: ", len(tokenized_prompt))
-    print("Question:", prompt)
-    print("Pred:", output)
-    print("")
+    # print("Length: ", len(tokenized_prompt))
+    # print("Question:", prompt)
+    # print("Pred:", output)
+    # print("")
 
-    return preds
+    return output
+
+prefix_prompt = "You will be asked a question after reading several passages. Please directly answer the question based on the given passages. Do NOT repeat the question. The answer should be within 5 words..\nPassages:\n"
+query_prompt = "\n\nAnswer the question directly based on the given passages. Do NOT repeat the question. The answer should be within 5 words. \nQuestion:"
+
 
 if __name__ == '__main__':
     inf_llm_config_path = "/home/xujie/TaoTie/config/mistral-inf-llm.yaml"
+    dataset = "wikimqa_s"
+    result_path = "/home/xujie/TaoTie/cb-bench/" + dataset + "/result.json"
     from omegaconf import OmegaConf
     args = OmegaConf.load(inf_llm_config_path)  
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -84,16 +91,42 @@ if __name__ == '__main__':
       args.model.tokenizer_path = args.model.path
     model, tokenizer = get_model_and_tokenizer(args.model)
 
-    while True:
-      input_text = input("input: ")
-
-      if(input_text == "exit"):
-        break
-    #   prompt = "[INST]" + normalize_context(input_text) + "[/INST]"
-
-      prompt = "[INST]" + combine_contexts([input_text]) + "[/INST]"
-
-      preds = get_pred(model, tokenizer, prompt,
+    dataset_path = "/home/xujie/TaoTie/benchmark/data/inputs/" + dataset + ".json"
+    
+    eval_dataset = load_dataset("/home/xujie/TaoTie/benchmark/data/inputs/wikimqa_s.json")
+    results = []
+    f1_scores = []
+    for ex in eval_dataset:
+        answers = ex["answers"]
+        doc_prompts, q_prompt = build_qa_prompt(ex, query_prompt)
+        doc_chunk_ids = [(doc)[1:] for doc in doc_prompts]
+        q_ids = (q_prompt)[1:]
+    
+        doc_chunk_ids = [prefix_prompt] + doc_chunk_ids + [q_ids]    
+        user_promt = "[INST]" + "".join(doc_chunk_ids) + "[/INST]"
+    
+        output = get_pred(model, tokenizer, user_promt,
                       args.max_len,100, verbose=True)
+        # print("Predsss:", output)
+        f1 = max([compute_f1(output[0], answer[0], tokenizer) for answer in answers])
+        # store the result
+        result = {
+            "pred": output,
+            "answers": answers,
+            "f1 socre": f1,
+        }
+        results.append(result)
+        f1_scores.append(f1)
 
-## [##TAOTIE##] who are u？
+    # print("F1 scores:", f1_scores)
+    print("Average F1 score:", sum(f1_scores) / len(f1_scores))
+    result_dir = os.path.dirname(result_path)
+    if not os.path.exists(result_dir):
+        os.makedirs(result_dir, exist_ok=True)
+
+    with open(result_path, "w") as f:
+        for result in results:
+            json.dump(result, f)
+            f.write("\n")
+
+## [##TAOTIE##] who are u ？

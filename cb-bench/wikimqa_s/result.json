@@ -1,0 +1,200 @@
+{"pred": ["Born in Naples. (Maria Theresa of Naples and Sicily)"], "answers": [["Ozalj"]], "f1 socre": 0}
+{"pred": ["John Bourchier, 1st Baron Berners."], "answers": [["John the Baptist"]], "f1 socre": 0.23529411764705882}
+{"pred": ["The director of film Man At Bath, Christophe Honore, works in the film industry."], "answers": [["Cahiers du cin\u00e9ma"]], "f1 socre": 0}
+{"pred": ["Yes, both films have French directors."], "answers": [["no"]], "f1 socre": 0}
+{"pred": ["William Paulet, 3Rd Marquess Of Winchester's father was born in the late 1400s. [Note: The exact year is not mentioned in the passage.]"], "answers": [["1510"]], "f1 socre": 0.15384615384615385}
+{"pred": ["Thomas Watson, 1st Earl of Malton."], "answers": [["Edward Watson"]], "f1 socre": 0.25}
+{"pred": ["John De Bohun died in 1336."], "answers": [["16 September 1360"]], "f1 socre": 0.3636363636363637}
+{"pred": ["Longinus, the exarch, is Helmichis's father-in-law."], "answers": [["Cunimund"]], "f1 socre": 0}
+{"pred": ["Central School, London."], "answers": [["St Patrick's College"]], "f1 socre": 0}
+{"pred": ["Bob Jones University"], "answers": [["Bob Jones University"]], "f1 socre": 1.0}
+{"pred": ["The Secret Invasion (1964)"], "answers": [["The House Of The Seven Hawks"]], "f1 socre": 0}
+{"pred": ["Beatrice D'Avesnes"], "answers": [["Marie of Hohenstaufen"]], "f1 socre": 0}
+{"pred": ["John II, Count of Hollande."], "answers": [["Guy II, Count of Soissons"]], "f1 socre": 0.39999999999999997}
+{"pred": ["In 1700."], "answers": [["26 April 1872"]], "f1 socre": 0.4}
+{"pred": ["United States"], "answers": [["America"]], "f1 socre": 0}
+{"pred": ["Barbara Hale"], "answers": [["Ona Munson"]], "f1 socre": 0}
+{"pred": ["The Death of Black King came out earlier, in 1932."], "answers": [["The Death Of Black King"]], "f1 socre": 0.47058823529411764}
+{"pred": ["Yes, both directors are Argentine."], "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Yes, both villages are in Iran."], "answers": [["no"]], "f1 socre": 0}
+{"pred": ["M. S. Sathyu was born in present-day Rajnandgaon district, India."], "answers": [["Mysore"]], "f1 socre": 0}
+{"pred": ["Hamar, Norway."], "answers": [["Kristiania"]], "f1 socre": 0}
+{"pred": ["Carnegie Mellon University"], "answers": [["Lee Strasberg Theatre and Film Institute"]], "f1 socre": 0}
+{"pred": ["Hell Up In Harlem (1973) was released before The Soviet Story (2008)."], "answers": [["Hell Up In Harlem"]], "f1 socre": 0.3846153846153846}
+{"pred": ["Cipriano Castro was born first."], "answers": [["Cipriano Castro"]], "f1 socre": 0.8}
+{"pred": ["The director of Monster On The Campus, Jack Arnold, died before The Year Of The Rabbit."], "answers": [["Monster On The Campus"]], "f1 socre": 0.33333333333333337}
+{"pred": ["Guy Arvely Dolsin is older."], "answers": [["Altu\u011f \u00c7elikbilek"]], "f1 socre": 0}
+{"pred": ["Jugband Blues came out first."], "answers": [["Jugband Blues"]], "f1 socre": 0.6666666666666666}
+{"pred": ["Yes, both are in Puerto Rico and the United States."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Rathold R\u00e1t\u00f3t"], "answers": [["Leustach R\u00e1t\u00f3t"]], "f1 socre": 0.5}
+{"pred": ["Bulacan, Philippines."], "answers": [["Nepal"]], "f1 socre": 0}
+{"pred": ["Montagu Bertie, 2nd Earl of Lindsey"], "answers": [["Archibald Acheson, 2nd Earl of Gosford"]], "f1 socre": 0.4137931034482759}
+{"pred": ["J. Paul Getty Sr."], "answers": [["Jean Paul Getty"]], "f1 socre": 0.6153846153846153}
+{"pred": ["At his home in Goring-on-Thames."], "answers": [["Goring-on-Thames, Oxfordshire"]], "f1 socre": 0.5882352941176471}
+{"pred": ["Yes, both are French directors."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Wooden Crosses (1932) was directed before The Abduction Club (2002)."], "answers": [["Wooden Crosses"]], "f1 socre": 0.2608695652173913}
+{"pred": ["Above Rubies came out earlier. (1998 vs. [UNK] [UNK] \u82b1 ; ma lan hua ), 2002)"], "answers": [["Above Rubies"]], "f1 socre": 0.19999999999999998}
+{"pred": ["Blue Blood And Red (1972) has the older director."], "answers": [["Blue Blood And Red"]], "f1 socre": 0.5}
+{"pred": ["Born in Castlemaine, Victoria, Australia."], "answers": [["Castlemaine, Victoria, Australia"]], "f1 socre": 0.8750000000000001}
+{"pred": ["Lyudmyla Olyanovska was born later."], "answers": [["Lyudmyla Olyanovska"]], "f1 socre": 0.8571428571428571}
+{"pred": ["Eyup Cemetery, Istanbul."], "answers": [["Constantinople"]], "f1 socre": 0}
+{"pred": ["Louis the German was born in Bavaria."], "answers": [["East Francia"]], "f1 socre": 0}
+{"pred": ["Tex And The Lord Of The Deep (1966)"], "answers": [["Henry Goes Arizona"]], "f1 socre": 0}
+{"pred": ["United Kingdom"], "answers": [["United Kingdom"]], "f1 socre": 1.0}
+{"pred": ["All-American Co-Ed was produced first. [Based on the provided filmography, All-American Co-Ed was produced in 1950 and Lagu Kenangan was produced in 1953.]"], "answers": [["All-American Co-Ed"]], "f1 socre": 0.18604651162790695}
+{"pred": ["Argentina"], "answers": [["Buenos Aires"]], "f1 socre": 0}
+{"pred": ["Duchess Magdalene Sibylle of Holstein-Gottorp"], "answers": [["Charlotte Amalie of Hesse-Kassel"]], "f1 socre": 0.08}
+{"pred": ["The place of death of Agnes Of Hohenstaufen's husband was in Transylvania."], "answers": [["Brunswick"]], "f1 socre": 0}
+{"pred": ["Empress Faustina the Elder"], "answers": [["Vibia Sabina"]], "f1 socre": 0.1818181818181818}
+{"pred": ["Bajo Otro Sol (1988) was released before Riding The California Trail (1947)."], "answers": [["Bajo Otro Sol"]], "f1 socre": 0.2608695652173913}
+{"pred": ["Marie-hermine Vachon"], "answers": [["Marie Lafor\u00eat"]], "f1 socre": 0.3333333333333333}
+{"pred": ["Ian Barry"], "answers": [["Sandra Nelson"]], "f1 socre": 0}
+{"pred": ["The father of Henrietta Maria of Brandenburg-Schwedt is Philip William, born on May 19, 1669."], "answers": [["May 19, 1669"]], "f1 socre": 0.4736842105263158}
+{"pred": ["The place of death of Sancha Of Castile, Queen Of Navarre's mother was in Leon."], "answers": [["Palencia"]], "f1 socre": 0}
+{"pred": ["Miley Naa Miley Hum (2011) was released more recently."], "answers": [["Miley Naa Miley Hum"]], "f1 socre": 0.6086956521739131}
+{"pred": ["Space Probe Taurus (1965) older director: Leonard Katzman.\nTom Mix In Arabia (year unknown) older director: Unknown."], "answers": [["Tom Mix In Arabia"]], "f1 socre": 0}
+{"pred": ["Jean Rollin died in 2010. [Passage mentions his death in 2010.]\n\nTherefore, the answer is: Jean Rollin died in 2010. (within 5 words)\n\n(Note: The question asks which of the two films, Seven In The Sun or Daughter Of The Jungle, the director died later. However, the passages provided do not mention which film the director was working on at"], "answers": [["Seven In The Sun"]], "f1 socre": 0.08}
+{"pred": ["Dr. Socrates was released first."], "answers": [["Dr. Socrates"]], "f1 socre": 0.7272727272727273}
+{"pred": ["Changeland (1994 \u2013 present)"], "answers": [["Changeland"]], "f1 socre": 0.3636363636363636}
+{"pred": ["Ruel Redinger is younger."], "answers": [["Ruel Redinger"]], "f1 socre": 0.8}
+{"pred": ["Amadeus VI of Savoy"], "answers": [["Alexandra Kolosova"]], "f1 socre": 0}
+{"pred": ["Jessi Colter"], "answers": [["Jessi Colter"]], "f1 socre": 1.0}
+{"pred": ["Twin Cairns Island is in Canada, Nova Zembla Island is in Russia."], "answers": [["yes"]], "f1 socre": 0}
+{"pred": ["Erich Haenisch died first, in 1939."], "answers": [["William Pooley"]], "f1 socre": 0}
+{"pred": ["The performer of song \"You Can\" is Madleen Kane, who is French."], "answers": [["Sweden"]], "f1 socre": 0}
+{"pred": ["Yes, they are both Norwegian."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Melody Of The World (1922)"], "answers": [["Melody Of The World"]], "f1 socre": 0.6153846153846153}
+{"pred": ["The composer died in Mexico. (Based on the mention of a Mexican remake of the film.)"], "answers": [["Madrid"]], "f1 socre": 0}
+{"pred": ["Audrey Davis Levin"], "answers": [["Gisela Elsner"]], "f1 socre": 0}
+{"pred": ["The Great Man's Lady"], "answers": [["La Belle Am\u00e9ricaine"]], "f1 socre": 0}
+{"pred": ["The passages do not provide information about the director of the film \"Sweepstakes.\""], "answers": [["Oklahoma City, Oklahoma"]], "f1 socre": 0}
+{"pred": ["The place of death of Shahnawaz Bhutto's mother was in Dubai."], "answers": [["Dubai"]], "f1 socre": 0.21052631578947367}
+{"pred": ["Nekfeu was born in France."], "answers": [["La Trinit\u00e9"]], "f1 socre": 0}
+{"pred": ["Prince Albert of Prussia"], "answers": [["Prince Albert of Prussia"]], "f1 socre": 1.0}
+{"pred": ["Yes, both are in Romania."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Gustrow, Mecklenburg-Gustrow."], "answers": [["Banbury"]], "f1 socre": 0}
+{"pred": ["Sir Paul Gore, 1st Baronet"], "answers": [["Sir Paul Gore, 1st Baronet"]], "f1 socre": 1.0}
+{"pred": ["The father of Nizar Al-Mustafa is from Egypt."], "answers": [["Fatimid caliphate"]], "f1 socre": 0}
+{"pred": ["Born in France. (From the passage about Marie-Adelaide of France, daughter of Louis X, who married Lou Breslow.)"], "answers": [["Dayton, Ohio"]], "f1 socre": 0}
+{"pred": ["Grand Duchess Maria Teresa of Luxembourg"], "answers": [["Ona Munson"]], "f1 socre": 0}
+{"pred": ["The Drover's Sweetheart came out earlier. (1911 vs. 1995)"], "answers": [["The Drover'S Sweetheart"]], "f1 socre": 0.3636363636363636}
+{"pred": ["Born in India."], "answers": [["Tumkur"]], "f1 socre": 0}
+{"pred": ["Det Sande Ansigt came out earlier. (1951)"], "answers": [["Det Sande Ansigt"]], "f1 socre": 0.5555555555555556}
+{"pred": ["Il Gaucho. (The given passages mention that Eugen York, the director of Il Gaucho, died in 1991.)"], "answers": [["Bomgay"]], "f1 socre": 0}
+{"pred": ["Donauworth, Germany."], "answers": [["Preslav"]], "f1 socre": 0}
+{"pred": ["The Pyramid came out first. (The Pyramid was released in 1989, while Revolt of the Praetorians was released in 1964.)"], "answers": [["Revolt Of The Praetorians"]], "f1 socre": 0.35}
+{"pred": ["Yes, both directors are French."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Constantia Eriksdotter's father died childless in 1463."], "answers": [["poisoning"]], "f1 socre": 0}
+{"pred": ["Albert Pyun is a Norwegian-American director."], "answers": [["America"]], "f1 socre": 0}
+{"pred": ["Hawaii or Abu Dhabi (depending on the specific husband in question)"], "answers": [["Kingdom of Hawaii"]], "f1 socre": 0.36363636363636365}
+{"pred": ["X-Paroni came out earlier. (1944)\nMi Novia Est\u00e1 De Madre came out later. (2007)"], "answers": [["X-Paroni"]], "f1 socre": 0.42857142857142855}
+{"pred": ["Vasantha Raagam was released earlier."], "answers": [["Vasantha Raagam"]], "f1 socre": 0.8}
+{"pred": ["Hong Jin-Ki"], "answers": [["Lee Byung-chul"]], "f1 socre": 0}
+{"pred": ["John the Fearless, Duke of Burgundy."], "answers": [["John I, Duke of Bourbon"]], "f1 socre": 0.5263157894736842}
+{"pred": ["Maharaja Ranjit Singh died in 1839."], "answers": [["27 June 1839"]], "f1 socre": 0.38461538461538464}
+{"pred": ["Born in the United States. (The passages do not provide specific information about the birthplace of the director of the film Gunsmoke.)"], "answers": [["Gura Humorului"]], "f1 socre": 0}
+{"pred": ["Jacques Dutronc"], "answers": [["Fran\u00e7oise Hardy"]], "f1 socre": 0}
+{"pred": ["Charles Wheatstone lived longer. [1502-1660], Jean-Claude Lauzon [1953-1997]"], "answers": [["Charles Wheatstone"]], "f1 socre": 0.2285714285714286}
+{"pred": ["Washington, D. C."], "answers": [["Washington"]], "f1 socre": 0.6666666666666666}
+{"pred": ["Our Agent Tiger (1965) was directed by Floyd Martin Thornton.\nLondon Melody (1922) was directed by H. Bruce Humberstone.\n\nTherefore, H. Bruce Humberstone died first."], "answers": [["London Melody"]], "f1 socre": 0}
+{"pred": ["Fern\u00e1n Blazquez de Caceres"], "answers": [["Fla\u00edn Mu\u00f1oz"]], "f1 socre": 0}
+{"pred": ["The child is not named in the passage."], "answers": [["Mira Sorvino"]], "f1 socre": 0}
+{"pred": ["Yes, both are Swedish."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Denmark"], "answers": [["Norway"]], "f1 socre": 0}
+{"pred": ["Heonjong Of Goryeo's father died naturally."], "answers": [["illness"]], "f1 socre": 0}
+{"pred": ["Mary of Woodstock's mother died in England. (The passages do not provide specific information about where in England.)"], "answers": [["Harby"]], "f1 socre": 0}
+{"pred": ["The director of Tiramisu (2002 Film) earned the Filmfare best art direction award. (for black-and-white film category)"], "answers": [["Hong Kong Film Award for Best Director"]], "f1 socre": 0.29411764705882354}
+{"pred": ["The director of film Nallavan Vazhvan died on 30 November 2015."], "answers": [["3 September 1992"]], "f1 socre": 0.3448275862068965}
+{"pred": ["Frederick Cleveland Morgan died first."], "answers": [["Nathaniel Mclenaghan"]], "f1 socre": 0}
+{"pred": ["University of Texas"], "answers": [["Tisch"]], "f1 socre": 0}
+{"pred": ["Cuchillos De Fuego (Blades of Fire) is the younger director's film. [Vittorio Cottafavi]"], "answers": [["Cuchillos De Fuego"]], "f1 socre": 0.4827586206896552}
+{"pred": ["Moment Of Danger (1960) was released earlier."], "answers": [["Moment Of Danger"]], "f1 socre": 0.42857142857142855}
+{"pred": ["Rock Street Journal was established first. (RSJ was published from January 1993)"], "answers": [["De As"]], "f1 socre": 0}
+{"pred": ["The Piper's Price. (It was released in 1917.)"], "answers": [["The Piper'S Price"]], "f1 socre": 0.4}
+{"pred": ["Yes, both are American."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Marie Jos\u00e9ne de Savoie was born in 1531."], "answers": [["13 March 1753"]], "f1 socre": 0.3703703703703704}
+{"pred": ["No Trees In The Street."], "answers": [["No Trees In The Street"]], "f1 socre": 0.4}
+{"pred": ["Born in Kerala, India."], "answers": [["Methala"]], "f1 socre": 0.25}
+{"pred": ["Alkohol came out earlier. (1919 vs. 1970)"], "answers": [["Alkohol"]], "f1 socre": 0.3636363636363636}
+{"pred": ["Many Tanks Mr. Atkins (1938) is older."], "answers": [["Do Musafir"]], "f1 socre": 0}
+{"pred": ["Yes, both films are from the United States."], "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Born in Germany. (Bert Grund)"], "answers": [["New York"]], "f1 socre": 0}
+{"pred": ["Contragolpe"], "answers": [["Contragolpe"]], "f1 socre": 1.0}
+{"pred": ["The director of film Jail Yatra died in Rome, Italy."], "answers": [["Mumbai"]], "f1 socre": 0}
+{"pred": ["The Comedians Of Comedy came out first."], "answers": [["The Comedians Of Comedy"]], "f1 socre": 0.7272727272727273}
+{"pred": ["Tombstone Rashomon was made first. (Alex Cox was born later than Ustaoglu.)"], "answers": [["Tombstone Rashomon"]], "f1 socre": 0.4}
+{"pred": ["Dhuen Ki Lakeer (1966)"], "answers": [["Dhuen Ki Lakeer"]], "f1 socre": 0.7058823529411764}
+{"pred": ["Perd\u00f3n, Viejita (1927)"], "answers": [["Perd\u00f3n, Viejita"]], "f1 socre": 0.6666666666666666}
+{"pred": ["University of Wisconsin - Madison"], "answers": [["University of Wisconsin"]], "f1 socre": 0.8}
+{"pred": ["Dudley Russell was born first."], "answers": [["Dudley Russell"]], "f1 socre": 0.7692307692307693}
+{"pred": ["Vytautas Strai\u017eys was born first."], "answers": [["Mirjam Polkunen"]], "f1 socre": 0}
+{"pred": ["Assassinated in 1801."], "answers": [["Saint Petersburg"]], "f1 socre": 0}
+{"pred": ["Ian Barry was born in Australia."], "answers": [["Eindhoven"]], "f1 socre": 0}
+{"pred": ["Women's Suffrage Journal was established first. (1870)"], "answers": [["Women'S Suffrage Journal"]], "f1 socre": 0.5555555555555556}
+{"pred": ["Munich, Bavaria."], "answers": [["Fairmont, West Virginia"]], "f1 socre": 0}
+{"pred": ["The Market Of Souls (1919)"], "answers": [["The Market Of Souls"]], "f1 socre": 0.5454545454545454}
+{"pred": ["Yes, both directors are French."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Born in Al-Andalus. (Refer to the passage for more details.)"], "answers": [["Morocco"]], "f1 socre": 0}
+{"pred": ["The place of death of Enheduanna's father was in Ur."], "answers": [["Akkadian empire"]], "f1 socre": 0}
+{"pred": ["Solemn Promise (1942) director born first."], "answers": [["Tarzan The Magnificent"]], "f1 socre": 0}
+{"pred": ["Wolf Warrior (Chinese director Wu Jing)"], "answers": [["Wolf Warrior"]], "f1 socre": 0.3636363636363636}
+{"pred": ["Tr\u1ecbnh Cuong"], "answers": [["Tr\u1ecbnh B\u00ednh"]], "f1 socre": 0.5454545454545454}
+{"pred": ["Born in Bristol, UK."], "answers": [["Gura Humorului"]], "f1 socre": 0}
+{"pred": ["Born in South Central Los Angeles. (August 15, 1985)"], "answers": [["Crenshaw"]], "f1 socre": 0}
+{"pred": ["Poveri Milionari (Tom Tykwer, born 1965) is younger than Winter Sleepers (Tom Tykwer, born 1965)."], "answers": [["Winter Sleepers"]], "f1 socre": 0.17142857142857143}
+{"pred": ["K\u0131z\u0131l buga or Basuk."], "answers": [["Adolf II of Berg"]], "f1 socre": 0}
+{"pred": ["Canada and USA, respectively."], "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Helge Schneider was born in Germany."], "answers": [["M\u00fclheim an der Ruhr"]], "f1 socre": 0}
+{"pred": ["Una Prostituta Al Servizio Del Pubblico E In Regola Con Le Leggi Dello Stato came out first, in 1970."], "answers": [["Una Prostituta Al Servizio Del Pubblico E In Regola Con Le Leggi Dello Stato"]], "f1 socre": 0.8163265306122449}
+{"pred": ["Yes, both movies are from the UK."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["King Chulalongkorn."], "answers": [["Mongkut"]], "f1 socre": 0.2}
+{"pred": ["Katherine Skipwith"], "answers": [["Lady Frances Manners"]], "f1 socre": 0}
+{"pred": ["Eric Rohmer directs L'Arbre, Le Maire Et La M\u00e9diath\u00e8que"], "answers": [["Cahiers du cin\u00e9ma"]], "f1 socre": 0}
+{"pred": ["Umberto Lenzi, born in Italy."], "answers": [["Newport, Wales"]], "f1 socre": 0}
+{"pred": ["Orange county, Virginia."], "answers": [["Gordonsville, Virginia"]], "f1 socre": 0.5}
+{"pred": ["Inna is born in Romania."], "answers": [["Mangalia"]], "f1 socre": 0}
+{"pred": ["Martin, the character played by Pauline Funk in the film, is the protagonist."], "answers": [["F\u00e9lix Leclerc"]], "f1 socre": 0}
+{"pred": ["Philip II, Duke of Savoy"], "answers": [["Jacques"]], "f1 socre": 0}
+{"pred": ["Joseph August, archduke of Austria."], "answers": [["G\u00e9za"]], "f1 socre": 0}
+{"pred": ["Hubbah, daughter of Hulail, is the paternal grandmother of King Kang Of Zhou."], "answers": [["Yi Jiang"]], "f1 socre": 0.08333333333333334}
+{"pred": ["Maria Isabel De Alc\u00e2ntara's mother died on 5 September 1896."], "answers": [["November 3, 1867"]], "f1 socre": 0.3448275862068965}
+{"pred": ["Guy Newall"], "answers": [["Ivy Duke"]], "f1 socre": 0}
+{"pred": ["He died in 1793."], "answers": [["1 August 1813"]], "f1 socre": 0.375}
+{"pred": ["The Yellow Teddy Bears (Marshall Leib is older)."], "answers": [["Season Of Strangers"]], "f1 socre": 0}
+{"pred": ["Yes, both are American."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Antoine Casavant was born before Abdul Ali Lalu."], "answers": [["Antoine Casavant"]], "f1 socre": 0.5714285714285715}
+{"pred": ["Oxford University"], "answers": [["Oxford"]], "f1 socre": 0.8}
+{"pred": ["John Dalrymple, 1st Earl of Stair."], "answers": [["Sir Hew Dalrymple, 2nd Baronet"]], "f1 socre": 0.38461538461538464}
+{"pred": ["Murderer In The Fog (Eugen York, born 1912)"], "answers": [["Murderer In The Fog"]], "f1 socre": 0.4210526315789474}
+{"pred": ["Ian Barry"], "answers": [["Milla"]], "f1 socre": 0}
+{"pred": ["In lecce."], "answers": [["Lecce"]], "f1 socre": 0.8571428571428571}
+{"pred": ["The director won three film festival awards."], "answers": [["Prometheus Award"]], "f1 socre": 0}
+{"pred": ["Prince Heinrich Xxx Reuss of Kostritz is German."], "answers": [["Duchy of Saxe-Gotha-Altenburg"]], "f1 socre": 0.07692307692307691}
+{"pred": ["The Longshots (1986) was directed by Paul Bartel, who was born after Sam Newfield (1899). Therefore, Station For Two (1953), directed by Sam Newfield, was made first."], "answers": [["Station For Two"]], "f1 socre": 0.1276595744680851}
+{"pred": ["Kronstadt, Russia."], "answers": [["Inverkeithing"]], "f1 socre": 0}
+{"pred": ["Before 1234. (The passage mentions that Thomas was the last gallovidian ruler in the legitimate patrilineal line descended from Fergus, indicating that his father had already passed away by this time.)"], "answers": [["1234"]], "f1 socre": 0.20408163265306123}
+{"pred": ["The father of Robert Bertie, 3rd Earl of Lindsey died in 1601."], "answers": [["25 July 1666"]], "f1 socre": 0.24242424242424243}
+{"pred": ["The Wind's Fierce (1927)"], "answers": [["The Wind'S Fierce"]], "f1 socre": 0.4444444444444445}
+{"pred": ["He committed suicide."], "answers": [["drowning"]], "f1 socre": 0}
+{"pred": ["Paris, France."], "answers": [["Abu Dhabi"]], "f1 socre": 0}
+{"pred": ["Born in Munich."], "answers": [["Prenzlau"]], "f1 socre": 0}
+{"pred": ["Born in Austria."], "answers": [["Pozna\u0144"]], "f1 socre": 0}
+{"pred": ["Capacho Viejo, Tachira."], "answers": [["Italy"]], "f1 socre": 0}
+{"pred": ["Born in England. (The husband of Maude Smith is John A. McDougald.)"], "answers": [["Toronto, Ontario"]], "f1 socre": 0}
+{"pred": ["The Third Kiss was released earlier."], "answers": [["Forbidden Daughters"]], "f1 socre": 0}
+{"pred": ["Yes, they are both American."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Bogdan \u021a\u0103ru\u0219 was born first."], "answers": [["Bogdan \u021a\u0103ru\u0219"]], "f1 socre": 0.8}
+{"pred": ["Folgore Division (1971)"], "answers": [["Sandflow"]], "f1 socre": 0}
+{"pred": ["From Corleone To Brooklyn (later directed by)"], "answers": [["From Corleone To Brooklyn"]], "f1 socre": 0.8421052631578948}
+{"pred": ["Yes, both lakes are located in Canada."], "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["The composer died in Pacific Palisades, California."], "answers": [["Vienna"]], "f1 socre": 0}
+{"pred": ["Johnny Ekstr\u00f6m was born later."], "answers": [["Johnny Ekstr\u00f6m"]], "f1 socre": 0.8}
+{"pred": ["Both mountains are in Peru."], "answers": [["yes"]], "f1 socre": 0}
+{"pred": ["English."], "answers": [["England"]], "f1 socre": 0}
+{"pred": ["The cause of death was not disclosed."], "answers": [["Parkinson"]], "f1 socre": 0}
+{"pred": ["Piers De Geneville"], "answers": [["Roger Mortimer, 1st Earl of March"]], "f1 socre": 0}
+{"pred": ["Ali Dinar died first."], "answers": [["Albertus Seba"]], "f1 socre": 0}
+{"pred": ["Frederick II, Duke of Wurttemberg."], "answers": [["Ferdinand I of the Two Sicilies"]], "f1 socre": 0.09523809523809525}
+{"pred": ["Prince Of Arcadia was released earlier."], "answers": [["Prince Of Arcadia"]], "f1 socre": 0.7692307692307693}
+{"pred": ["Marco Risi (Italian)"], "answers": [["Milan"]], "f1 socre": 0}
+{"pred": ["Berlin, Germany."], "answers": [["K\u00f6ln"]], "f1 socre": 0}
