@@ -668,7 +668,7 @@ class ContextManager:
     def offload_ssd(self , hash_str ,layer_idx):
         # store the global block to ssd by binary format
         file_name =  "kvcache/global_blocks_data" + str(hash_str[0]) + "layer_"+ str(layer_idx) + ".bin"
-        with open(file_name, "wb") as f:
+2        with open(file_name, "wb") as f:
             # store the global block
             f.write(np.array([self.num_units - 1, len(self.global_blocks[0]) , self._global_remainder_ed - self._global_remainder_st ], dtype=np.int32).tobytes())
             # Iterate through each unit and block to serialize and store their data

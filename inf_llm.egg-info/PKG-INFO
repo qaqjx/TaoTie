@@ -1,11 +1,5 @@
-Metadata-Version: 2.1
-Name: inf-llm
+Metadata-Version: 2.4
+Name: inf_llm
 Version: 0.0.1
-Summary: UNKNOWN
-Home-page: UNKNOWN
-License: UNKNOWN
-Platform: UNKNOWN
 License-File: LICENSE
-
-UNKNOWN
-
+Dynamic: license-file

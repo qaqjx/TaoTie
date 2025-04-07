@@ -1,6 +1,13 @@
 LICENSE
 README.md
 setup.py
+benchmark/__init__.py
+benchmark/download.py
+benchmark/eval.py
+benchmark/infinitebench_eval.py
+benchmark/merge.py
+benchmark/metrics.py
+benchmark/pred.py
 inf_llm/__init__.py
 inf_llm/chat.py
 inf_llm.egg-info/PKG-INFO
@@ -23,3 +30,6 @@ inf_llm/utils/__init__.py
 inf_llm/utils/greedy_search.py
 inf_llm/utils/patch.py
 inf_llm/utils/patch_mc.py
+test/test_cb.py
+test/test_inject.py
+test/test_offload.py
