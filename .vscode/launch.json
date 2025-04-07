@@ -33,7 +33,7 @@
       "name": "test",
       "type": "debugpy",
       "request": "launch",
-      "program": "test/test_cb.py",
+      "program": "test/cacheblend_taotie_bench.py",
       "justMyCode": false,
     }
   ]

@@ -90,7 +90,7 @@ def inf_llm_forward(
             # 2. if the kv is reused, we need to recover the deviation
             if layer_idx == 1:
                 # choose the kv for the blend
-                deviation = torch.abs(h_k - recover_k).sum(dim = 2)
+                deviation = torch.abs(h_k - recover_k).sum(dim = 1)
                 _, topk_deviation = deviation.topk( k = int(token_num * 0.15), dim = 1)
                 recompute_idx = topk_deviation
             else: 
