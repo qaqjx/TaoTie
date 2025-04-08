@@ -1,7 +1,8 @@
+import time
 import torch
 from typing import Optional
 from .context_manager import ContextManager
-
+import nvtx
 
 def inf_llm_forward(
     n_local, n_init, topk, 
@@ -61,6 +62,10 @@ def inf_llm_forward(
                     kv_c.append(key_value[ :, cacheblend_indices[idx - 1][1]:cacheblend_indices[idx][0],:])
             kv_c.append(key_value[ :, cacheblend_indices[-1][1]:,:])               
             key_value = torch.cat(kv_c,dim = 1)
+        
+        # prefetch the kv cache to the CPU
+        if is_blend == 1 and layer_idx >= 1:
+            past_key_value.get_previous_kv(hash_str, key_value, layer_idx)
 
         h_q = project_q(query)             # (batch, len_q, num_heads * dim_head)
         h_k = project_k(key_value)         # (batch, len_k, num_heads * dim_head)
@@ -94,9 +99,9 @@ def inf_llm_forward(
                 _, topk_deviation = deviation.topk( k = int(token_num * 0.15), dim = 1)
                 recompute_idx = topk_deviation
             else: 
-                for i,idx in enumerate(recompute_idx):
-                    h_k[:,:,idx,:] = recover_k[:,:,i,:]
-                    h_v[:,:,idx,:] = recover_v[:,:,i,:]
+                recompute_idx = torch.tensor(recompute_idx)  
+                h_k[:,:,recompute_idx,:] = recover_k
+                h_v[:,:,recompute_idx,:] = recover_v
                 
 
         local_q, local_k, local_v = h_q, h_k, h_v

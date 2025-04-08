@@ -8,6 +8,16 @@ from benchmark.pred import serialize_and_hash
 from inf_llm.utils import patch_hf, GreedySearch, patch_model_center, find_special_tokens
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from inf_llm.utils.patch import SPECIAL_TOKENS
+import torch
+
+def load_result(result_path):
+    loaded_results = []
+    with open(result_path, "r") as f:
+        for line in f:
+            if line.strip():  # Skip empty lines
+                result = json.loads(line)
+                loaded_results.append(result)
+    return loaded_results
 
 def load_dataset(dataset_path):
     print("Loading dataset:", dataset_path)
@@ -155,4 +165,4 @@ def get_pred(
     # print("Pred:", output)
     # print("")
 
-    return output
+    return output,TTFT

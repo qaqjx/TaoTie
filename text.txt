@@ -1,0 +1,23 @@
+Loading dataset: /home/xujie/TaoTie/benchmark/data/inputs/wikimqa_s.json
+Segmentation divide time:  7.62939453125e-06
+Segmentation prefill time:  0.275911808013916
+Segmentation divide time:  6.67572021484375e-06
+Segmentation prefill time:  0.16805410385131836
+Segmentation divide time:  6.4373016357421875e-06
+Segmentation prefill time:  0.1610267162322998
+Segmentation divide time:  6.4373016357421875e-06
+Segmentation prefill time:  0.2009572982788086
+Segmentation divide time:  6.67572021484375e-06
+Segmentation prefill time:  0.1674795150756836
+Segmentation divide time:  6.67572021484375e-06
+Segmentation prefill time:  0.2030353546142578
+Segmentation divide time:  6.4373016357421875e-06
+Segmentation prefill time:  0.1715843677520752
+Segmentation divide time:  5.9604644775390625e-06
+Segmentation prefill time:  0.17058300971984863
+Segmentation divide time:  5.9604644775390625e-06
+Segmentation prefill time:  0.20151853561401367
+Segmentation divide time:  6.67572021484375e-06
+Segmentation prefill time:  0.1970522403717041
+--------------------
+blend time: 0.0017199516296386719

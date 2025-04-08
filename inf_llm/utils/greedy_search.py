@@ -58,6 +58,7 @@ class GreedySearch:
                 
                 # segmentation
                 for st in range(0, input_ids.size(1) - 1, chunk_size):
+                    seg_begin = time.time()
                     ed = min(input_ids.size(1) - 1, st + chunk_size)
                     cb_indices = []
                     st_hash_idx = 10000000
@@ -77,6 +78,9 @@ class GreedySearch:
                     else:
                         self.model.model.cacheblend_indices = []
                         self.model.model.hash_str = self.model.hash_str
+                    seg_divide = time.time()
+
+
                     out = self.model(
                         input_ids = input_ids[:, st: ed],
                         attention_mask = attention_mask[:, :ed],
@@ -85,6 +89,10 @@ class GreedySearch:
                         past_key_values = past_key_values
                     )
                     logits, past_key_values = out.logits, out.past_key_values
+
+                    seg_end = time.time()
+                    # print("Segmentation divide time: ", seg_divide - seg_begin)
+                    # print("Segmentation prefill time: ", seg_end - seg_divide)
                 self.model.model.is_blend = 0
                 self.model.model.hash_str = []
 

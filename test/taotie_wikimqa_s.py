@@ -6,8 +6,8 @@ import torch
 from utils_exp import combine_contexts, get_model_and_tokenizer, get_pred, load_dataset, normalize_context, build_qa_prompt, compute_f1
 
 
-prefix_prompt = "You will be asked a question after reading several passages. Please directly answer the question based on the given passages. Do NOT repeat the question. The answer should be within 5 words..\nPassages:\n"
-query_prompt = "\n\nAnswer the question directly based on the given passages. Do NOT repeat the question. The answer should be within 5 words. \nQuestion:"
+prefix_prompt = "Answer the question based on the given passages. Only give me the answer and do not output any other words.\n\nThe following are given passages.\n"
+query_prompt = f"\n\nAnswer the question based on the given passages. Answer the question within 5 words. Do NOT repeat the question or output any other words. Question: "
 
 dataset = "wikimqa_s"
 config_path = "/home/xujie/TaoTie/"
@@ -41,23 +41,24 @@ if __name__ == '__main__':
             get_pred(model, tokenizer, prompt,
                       args.max_len,1, verbose=True)
         
-        time.sleep(3)
-
+        # print("--------------------")
         doc_chunk_ids = prefix_prompt +  combine_contexts(doc_chunk_ids) + q_ids  
         user_promt = "[INST]" + doc_chunk_ids + "[/INST]"
     
-        output = get_pred(model, tokenizer, user_promt,
+        output,ttft = get_pred(model, tokenizer, user_promt,
                       args.max_len,100, verbose=True)
         # print("Predsss:", output)
         f1 = max([compute_f1(output[0], answer[0], tokenizer) for answer in answers])
         # store the result
         result = {
             "pred": output,
+            "TTFT": ttft,
             "answers": answers,
             "f1 socre": f1,
         }
         results.append(result)
         f1_scores.append(f1)
+        # break
 
     # print("F1 scores:", f1_scores)
     print("Average F1 score:", sum(f1_scores) / len(f1_scores))

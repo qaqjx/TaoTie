@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import torch
 from typing import Optional, Tuple
@@ -29,6 +30,7 @@ class CudaCache:
 class CPUCache:
     def __init__(self):
         self.kv = dict()
+        self.all_time = 0
 
     def find(self , filename):
         if filename in self.kv:
@@ -40,13 +42,16 @@ class CPUCache:
         self.kv[filename] = data
     
     def get_kv(self, filename, slot_st = 0, slot_ed = -1, offset = 4):
+        # start = time.time()
         slot_st = slot_st + offset
         slot_ed = slot_ed + offset
         
         if self.find(filename) is None:
             k,v = self.load_ssd(filename)
             self.insert(filename, [k,v])
-        
+        #  end = time.time()
+        # self.all_time += end - start
+        # print("load time: ", end - start , "all time: ", self.all_time)
         return self.kv[filename][0][:,:,slot_st:slot_ed,:], self.kv[filename][1][:,:,slot_st:slot_ed,:]
     
     def load_ssd(self , file_name):
@@ -668,7 +673,7 @@ class ContextManager:
     def offload_ssd(self , hash_str ,layer_idx):
         # store the global block to ssd by binary format
         file_name =  "kvcache/global_blocks_data" + str(hash_str[0]) + "layer_"+ str(layer_idx) + ".bin"
-2        with open(file_name, "wb") as f:
+        with open(file_name, "wb") as f:
             # store the global block
             f.write(np.array([self.num_units - 1, len(self.global_blocks[0]) , self._global_remainder_ed - self._global_remainder_st ], dtype=np.int32).tobytes())
             # Iterate through each unit and block to serialize and store their data
@@ -697,14 +702,24 @@ class ContextManager:
             idx = indices[i]
             filename =  "kvcache/global_blocks_data" + str(hash_s) + "layer_"+ str(layer_idx) + ".bin"
             # append to the current ctm 
+            start = time.time()
             k, v = self.cpucache.get_kv(filename,idx[-2],idx[-1] )
 
             k = k.to(partial_k.device)
             v = v.to(partial_v.device)
+            end = time.time()
+            # print("load time: ", end - start )
             # Insert the concatenated tensors into the correct positions in partial_k and partial_v
             partial_k = torch.cat([partial_k[:,:,:idx[0],:], k , partial_k[: , : , idx[0]: , :]] ,dim = 2)  # Insert as a single-element batch
             partial_v = torch.cat([partial_v[:,:,:idx[0],:], v , partial_v[: , : , idx[0]: , :]] ,dim = 2)  # Insert as a single-element batch   
         return partial_k, partial_v
+
+    def get_previous_kv(self, hash_str, indices, layer_idx):
+        # Load the global block data from the SSD
+        for i, hash_s in enumerate(hash_str):
+            filename =  "kvcache/global_blocks_data" + str(hash_s) + "layer_"+ str(layer_idx) + ".bin"
+            # append to the current ctm 
+            self.cpucache.get_kv(filename)
 
     def append_global(
         self, exc_length, kv_length, local_score

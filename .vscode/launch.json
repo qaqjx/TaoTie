@@ -33,7 +33,7 @@
       "name": "test",
       "type": "debugpy",
       "request": "launch",
-      "program": "test/cacheblend_taotie_bench.py",
+      "program": "test/taotie_wikimqa_s.py",
       "justMyCode": false,
     }
   ]
