@@ -929,7 +929,6 @@ class ContextManager:
         return self.block_k[0].length
       
     def do_blend(self, rc_q, rc_k, rc_v, rc_idx, hash_str, indices, layer_idx):
-        # TODO: 
         # 1. flush the local cache to global cache
         self.flush_loacl_to_block()
         
@@ -943,7 +942,7 @@ class ContextManager:
         doc_repr = doc_repr.to(device)
 
         idx_st = idx[0][-2] // self.block_size
-        idx_ed = (idx[0][-1] + self.block_size - 2) // self.block_size 
+        idx_ed = idx[0][-1] // self.block_size + (idx[0][-1] % self.block_size != 0 )
 
         append_unit = []
         append_unit_repr = []
@@ -986,6 +985,7 @@ class ContextManager:
                 global_q = self.position_embedding.apply_rotary_pos_emb_one_angle(
                     global_q, self.n_local
                 )
+
             block_o = self.append(
                 local_q, local_k, local_v,
                 global_q, global_k, global_v,

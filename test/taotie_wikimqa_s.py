@@ -33,21 +33,23 @@ if __name__ == '__main__':
     doc_str = dict()
 
     for i,ex in enumerate(eval_dataset):
+        # if i < 4:
+        #     continue
 
         answers = ex["answers"]
         doc_prompts, q_prompt = build_qa_prompt(ex, query_prompt)
         doc_chunk_ids = [(doc)[1:] for doc in doc_prompts]
         q_ids = (q_prompt)[1:]
 
-        for prompt in doc_chunk_ids:
-            # print("length:", len(prompt))
-            prompt = "[INST]" + normalize_context(prompt) + "[/INST]"
-            if prompt not in doc_str:
-                doc_str[prompt] = 1
-                get_pred(model, tokenizer, prompt,
-                      args.max_len,1, verbose=True)
-            else:
-                continue
+        # for prompt in doc_chunk_ids:
+        #     # print("length:", len(prompt))
+        #     prompt = "[INST]" + normalize_context(prompt) + "[/INST]"
+        #     if prompt not in doc_str:
+        #         doc_str[prompt] = 1
+        #         get_pred(model, tokenizer, prompt,
+        #               args.max_len,1, verbose=True)
+        #     else:
+        #         continue
         
         # print("--------------------")
         doc_chunk_ids = prefix_prompt +  combine_contexts(doc_chunk_ids) + q_ids  
@@ -66,7 +68,7 @@ if __name__ == '__main__':
         }
         results.append(result)
         f1_scores.append(f1)
-        # print(i)
+        print(i)
 
     # print("F1 scores:", f1_scores)
     print("Average F1 score:", sum(f1_scores) / len(f1_scores))
