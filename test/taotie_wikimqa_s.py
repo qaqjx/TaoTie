@@ -15,7 +15,7 @@ result_path_prefix = "/home/xujie/TaoTie/cb-bench/"
 
 if __name__ == '__main__':
     inf_llm_config_path = config_path + "config/mistral-inf-llm.yaml"
-    result_path = result_path_prefix + dataset + "/taotie-result-test.json"
+    result_path = result_path_prefix + dataset + "/taotie-result-512-b.json"
     from omegaconf import OmegaConf
     args = OmegaConf.load(inf_llm_config_path)  
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

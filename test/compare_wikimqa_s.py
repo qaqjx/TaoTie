@@ -11,7 +11,7 @@ result_path_prefix = "/home/xujie/TaoTie/cb-bench/"
 if __name__ == '__main__':
     inf_llm_config_path = config_path + "config/mistral-inf-llm.yaml"
     infllm_result_path = result_path_prefix + dataset + "/result.json"
-    taotie_result_path = result_path_prefix + dataset + "/taotie-result-test.json"
+    taotie_result_path = result_path_prefix + dataset + "/taotie-result-512.json"
 
     from omegaconf import OmegaConf
     args = OmegaConf.load(inf_llm_config_path)  

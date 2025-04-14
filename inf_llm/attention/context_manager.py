@@ -67,6 +67,16 @@ class CPUCache:
         
         return self.memory_units[filename]
 
+    def get_memory_k(self,filename, indices):
+        if filename not in self.memory_units:
+            self.memory_units[filename] = self.load_to_context_manager(filename)
+        all_k , _ , _ = self.memory_units[filename]
+
+        all_k_tensor = torch.cat(all_k, dim=-2)
+        
+        return all_k_tensor[:, indices[-2] : indices[-1], :]
+
+
     def load_to_context_manager(self , file_name):
         with open(file_name, "rb") as f:        
             # load the repr token
@@ -866,14 +876,13 @@ class ContextManager:
         if self.async_global_stream:
             GLOBAL_STREAM.wait_stream(torch.cuda.current_stream())
 
-        if self.local_k.size(-2) > 0:
-
+        if self.global_remainder[0].size(-2) > 0:
             global_remainder_len = self._global_remainder_ed - self._global_remainder_st
             assert global_remainder_len == self.global_remainder[0].size(-2)
             assert global_remainder_len == self.global_remainder_local_score.size(-1)
 
             while global_remainder_len > 0:
-                unit_size = min(self.block_size,global_remainder_len)
+                unit_size = min(self.block_size, global_remainder_len)
 
                 global_remainder_len -= unit_size
                 for u in range(self.batch_size):
@@ -908,13 +917,14 @@ class ContextManager:
                 self.num_global_block += 1
                 assert self.num_global_block == self.block_k[0].length
                 self._global_remainder_st += unit_size
-            
-            # update the local kv 
-            self.local_k = self.local_k[:, :, :-0, :]
-            self.local_v = self.local_v[:, :, :-0, :]
 
             # update the global remainder and clear the local cache
             with torch.cuda.stream(GLOBAL_STREAM):
+
+                # update the local kv 
+                self.local_k = self.local_k[:, :, :-0, :]
+                self.local_v = self.local_v[:, :, :-0, :]
+
                 self.global_remainder = (
                     self.global_remainder[0][:, :, :-0, :],
                     self.global_remainder[1][:, :, :-0, :]
@@ -924,7 +934,8 @@ class ContextManager:
                 self._global_remainder_st = 0
             
             assert self._global_remainder_ed == 0
-
+        
+        assert self.num_global_block == self.block_k[0].length
         self.init_exc = True
         return self.block_k[0].length
       
@@ -959,6 +970,8 @@ class ContextManager:
                 )
             )
             append_unit_repr.append(doc_repr[i:i+1,:])
+
+        current_repr_token_num = self.block_k[0].length
 
         append_idx = 0
         o_list = []
@@ -995,7 +1008,7 @@ class ContextManager:
             self.flush_loacl_to_block()
             
             # todo update the repr token
-            self.block_k[0].update_back(append_unit_repr[block_idx])
+            # self.block_k[0].update_back(append_unit_repr[block_idx])
             append_idx += 1
 
         while append_idx < len(append_unit):
@@ -1007,6 +1020,10 @@ class ContextManager:
 
         global_remainder_len = self._global_remainder_ed - self._global_remainder_st
         assert global_remainder_len == self.global_remainder[0].size(-2)
+
+        assert self.block_k[0].length == current_repr_token_num + len(append_unit_repr)
+
+
         return o
 
     def append(
@@ -1137,6 +1154,8 @@ class ContextManager:
                 self.global_remainder[1][:, :, self._global_remainder_st:, :]
             )
             self.global_remainder_local_score = self.global_remainder_local_score[:, :, self._global_remainder_st:]
+            self._global_remainder_st = 0
+            self._global_remainder_ed = self.global_remainder[0].size(-2)
             assert self._global_remainder_ed - self._global_remainder_st == self.global_remainder[0].size(-2)
 
         ret = torch.cat(o_list, dim=-2)
@@ -1150,17 +1169,16 @@ class ContextManager:
         self,
         local_q, local_k, local_v,
         global_q, global_k, global_v,
-        hash_str, indices, layer_idx, recompute_ratio = 1):
+        hash_str, indices, layer_idx, recompute_ratio = 0.15):
         
+        #  selective the block to recompute
         self.flush_loacl_to_block()
-
         len_q = local_q.size(-2)
         o = self.append(
             local_q, local_k, local_v,
             global_q, global_k, global_v
         )
-
-        self.flush_loacl_to_block()
+        # self.flush_loacl_to_block()
 
         filename =  "kvcache/global_blocks_data" + str(hash_str) + "layer_"+ str(layer_idx) + ".bin"
         # append to the current ctm 
@@ -1173,18 +1191,57 @@ class ContextManager:
 
         recompute_tokens = self.block_k[0].data[-repr_tokens.size(0) : ]
 
-        deviation = torch.abs(repr_tokens - recompute_tokens).sum(dim=-1)
+        deviation = torch.mean((repr_tokens - recompute_tokens) ** 2,dim = -1)
 
         recompute_block_num = int(np.ceil((repr_ed - repr_st) * recompute_ratio))
         _,topk_deviation = torch.topk(deviation, recompute_block_num, dim=0)
         topk_deviation = topk_deviation.view(-1).tolist()
 
         recompute_idx = [idx * self.block_size + i for idx in topk_deviation for i in range(self.block_size) if idx * self.block_size + i < len_q]
-
+        recompute_idx.sort()
         recompute_idx_tensor = torch.tensor(recompute_idx, dtype=torch.long, device=local_q.device)
         o = o[:,:, recompute_idx_tensor,:]
         
         return  o, recompute_idx
+
+    def selective_recompute_block_by_k_deviation(self,
+        local_q, local_k, local_v,
+        global_q, global_k, global_v,
+        hash_str, indices, layer_idx, recompute_ratio = 0.15):
         
+        len_q = local_q.size(-2)
+        o = self.append(
+            local_q, local_k, local_v,
+            global_q, global_k, global_v
+        )
+
+        filename =  "kvcache/global_blocks_data" + str(hash_str) + "layer_"+ str(layer_idx) + ".bin"
+
+        key = self.cpucache.get_memory_k(filename, indices[0])
+        key = key.reshape(local_k.shape).to(local_q.device)
+        repr_st = indices[0][-2] // self.block_size
+        repr_ed = (indices[0][-1] + self.block_size - 1) // self.block_size 
+
+        dims_to_average = [0 , 1 , -1]
+        diff_per_token = torch.mean((key - local_k) ** 2, dim=dims_to_average)
+        block_deviations = []
+
+        for i in range(0 , local_q.size(-2) , self.block_size):
+            st = i * self.block_size   
+            ed = min(i + self.block_size, local_q.size(-1))
+            block_diff = diff_per_token[st:ed]
+            block_deviations.append(block_diff.sum().item())
+
+        recompute_block_num = int(np.ceil((repr_ed - repr_st) * recompute_ratio))
+        _,topk_deviation = torch.topk(torch.tensor(block_deviations), recompute_block_num, dim=0)
+        topk_deviation = topk_deviation.view(-1).tolist()
+
+        recompute_idx = [idx * self.block_size + i for idx in topk_deviation for i in range(self.block_size) if idx * self.block_size + i < len_q]
+        recompute_idx.sort()
+        recompute_idx_tensor = torch.tensor(recompute_idx, dtype=torch.long, device=local_q.device)
+        o = o[:,:, recompute_idx_tensor,:] 
+        
+        return o, recompute_idx
+
     def size(self, *args, **kwargs):
         return self.length

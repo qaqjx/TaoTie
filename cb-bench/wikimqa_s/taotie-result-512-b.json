@@ -1,0 +1,200 @@
+{"pred": ["Born in Munich, Bavaria."], "TTFT": 3.255986213684082, "answers": [["Ozalj"]], "f1 socre": 0}
+{"pred": ["Janos, son of Henry IV, is Sobe (Sister of Saint Anne)'s grandchild."], "TTFT": 2.006892204284668, "answers": [["John the Baptist"]], "f1 socre": 0}
+{"pred": ["Pinewood Studios."], "TTFT": 2.244236707687378, "answers": [["Cahiers du cin\u00e9ma"]], "f1 socre": 0}
+{"pred": ["Yes, both films were directed by Roger Corman."], "TTFT": 2.011443853378296, "answers": [["no"]], "f1 socre": 0}
+{"pred": ["The father of William Paulet, 3rd Marquess of Winchester, was born around 1456."], "TTFT": 2.154996156692505, "answers": [["1510"]], "f1 socre": 0.20689655172413793}
+{"pred": ["Edward Watson, Viscount Rochingham's paternal grandfather was Thomas Watson, Earl of Rochingham."], "TTFT": 1.9845695495605469, "answers": [["Edward Watson"]], "f1 socre": 0.2758620689655173}
+{"pred": ["Died in 1312."], "TTFT": 2.175682544708252, "answers": [["16 September 1360"]], "f1 socre": 0.5}
+{"pred": ["The father-in-law of Helmichis is the Duke of Cui."], "TTFT": 2.2004590034484863, "answers": [["Cunimund"]], "f1 socre": 0}
+{"pred": ["The father of Helena Carroll studied in England."], "TTFT": 1.8385934829711914, "answers": [["St Patrick's College"]], "f1 socre": 0}
+{"pred": ["The director of \"Wine of Morning\" works in the film industry."], "TTFT": 2.0252010822296143, "answers": [["Bob Jones University"]], "f1 socre": 0}
+{"pred": ["The House of The Seven Hawks was made earlier. (1963)"], "TTFT": 1.9147210121154785, "answers": [["The House Of The Seven Hawks"]], "f1 socre": 0.6}
+{"pred": ["Marie Louise's paternal grandmother is Anne Bourchier, daughter of Thomas Fiennes, Baron de Dacre."], "TTFT": 2.182115077972412, "answers": [["Marie of Hohenstaufen"]], "f1 socre": 0.1764705882352941}
+{"pred": ["The uncle of Count Renaud Ii of Soissons is Gunther, Count of Cologne."], "TTFT": 2.3500545024871826, "answers": [["Guy II, Count of Soissons"]], "f1 socre": 0.46153846153846156}
+{"pred": ["The father of William Le Poer Trench died before 1700."], "TTFT": 2.0336997509002686, "answers": [["26 April 1872"]], "f1 socre": 0.24000000000000005}
+{"pred": ["The director of Renegade Force is from Israel."], "TTFT": 2.132774591445923, "answers": [["America"]], "f1 socre": 0}
+{"pred": ["Bev Land\n\n(Note: The given text is incomplete and contains errors, making it difficult to provide a definitive answer without additional context. The passage mentions Bev Land as the spouse of the director of the film \"Emergency Wedding\" and that she was married to him twice, to Ivy Wright and to Tony Davis. However, it is unclear which marriage is referred to in the context of the question. Assuming the question is asking about the most recent marriage"], "TTFT": 2.1995012760162354, "answers": [["Ona Munson"]], "f1 socre": 0}
+{"pred": ["Indradhanura Chhai came out earlier."], "TTFT": 1.9925341606140137, "answers": [["The Death Of Black King"]], "f1 socre": 0}
+{"pred": ["Yes, both directors are Australian."], "TTFT": 2.1668970584869385, "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Yes, both villages are in Iran."], "TTFT": 1.9853334426879883, "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Born in India."], "TTFT": 2.164055347442627, "answers": [["Mysore"]], "f1 socre": 0}
+{"pred": ["The place of death of Randi Monsen's father is not mentioned in the given passages."], "TTFT": 2.0377988815307617, "answers": [["Kristiania"]], "f1 socre": 0}
+{"pred": ["Born in West Berlin, Germany."], "TTFT": 2.0563759803771973, "answers": [["Lee Strasberg Theatre and Film Institute"]], "f1 socre": 0}
+{"pred": ["The Soviet Story's director was born before Hell in Harlem."], "TTFT": 2.0533552169799805, "answers": [["Hell Up In Harlem"]], "f1 socre": 0.47058823529411764}
+{"pred": ["Cipriano Castro was born before Damir Nik\u0161i\u0107."], "TTFT": 2.161166191101074, "answers": [["Cipriano Castro"]], "f1 socre": 0.5714285714285715}
+{"pred": ["The Year of The Rabbit's director died first. (1952 for The Year of The Rabbit, 1959 for Monster on The Campus)"], "TTFT": 2.169261932373047, "answers": [["Monster On The Campus"]], "f1 socre": 0.20689655172413793}
+{"pred": ["Guy Dolsin is younger than Altu\u011f \u00c7elikbilek."], "TTFT": 2.1169257164001465, "answers": [["Altu\u011f \u00c7elikbilek"]], "f1 socre": 0.7692307692307693}
+{"pred": ["Jugband Blues came out first."], "TTFT": 2.529208183288574, "answers": [["Jugband Blues"]], "f1 socre": 0.6666666666666666}
+{"pred": ["Yes, both are in the United States."], "TTFT": 2.0296032428741455, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["The paternal grandfather of Baldwin R\u00e1t\u00f3t is Humphrey, Duke of Hereford."], "TTFT": 2.0340046882629395, "answers": [["Leustach R\u00e1t\u00f3t"]], "f1 socre": 0.23999999999999996}
+{"pred": ["Born in San Miguel de Mayumo, Bulacan."], "TTFT": 2.137298822402954, "answers": [["Nepal"]], "f1 socre": 0}
+{"pred": ["Robert Acheson, Earl of Gosford, is the paternal grandfather of Archibald Acheson."], "TTFT": 2.611133098602295, "answers": [["Archibald Acheson, 2nd Earl of Gosford"]], "f1 socre": 0.6315789473684211}
+{"pred": ["J. Paul Getty (senior)"], "TTFT": 2.156744956970215, "answers": [["Jean Paul Getty"]], "f1 socre": 0.6666666666666666}
+{"pred": ["Michael Jackson died in 2016."], "TTFT": 2.325800657272339, "answers": [["Goring-on-Thames, Oxfordshire"]], "f1 socre": 0}
+{"pred": ["Yes, both are French."], "TTFT": 2.140882968902588, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["The Abduction Club director was born before Wooden Crosses. (The given passage mentions that Dana Blankstein directed The Abduction Club in 1987, and was born in 1981.)"], "TTFT": 2.35260272026062, "answers": [["Wooden Crosses"]], "f1 socre": 0.13953488372093023}
+{"pred": ["The Magic Aster came out earlier. (The passage mentions that The Magic Aster premiered at the 1956 Warsaw International Film Festival.)"], "TTFT": 2.4562199115753174, "answers": [["Above Rubies"]], "f1 socre": 0}
+{"pred": ["Blue Blood is older (1970)."], "TTFT": 2.1841583251953125, "answers": [["Blue Blood And Red"]], "f1 socre": 0.30769230769230765}
+{"pred": ["Born in Ch\u00e2lusse, France."], "TTFT": 2.386793613433838, "answers": [["Castlemaine, Victoria, Australia"]], "f1 socre": 0}
+{"pred": ["Lyudmyla Olyanovska was born later."], "TTFT": 2.061704635620117, "answers": [["Lyudmyla Olyanovska"]], "f1 socre": 0.8571428571428571}
+{"pred": ["Sultan Mehmed's death occurred in 1918."], "TTFT": 2.2018349170684814, "answers": [["Constantinople"]], "f1 socre": 0}
+{"pred": ["The father of Bernard (Son of Charles The Fat) was Louis the German."], "TTFT": 2.007093906402588, "answers": [["East Francia"]], "f1 socre": 0}
+{"pred": ["Jiri Menzel died before John Ford."], "TTFT": 2.4332849979400635, "answers": [["Henry Goes Arizona"]], "f1 socre": 0}
+{"pred": ["George Jones"], "TTFT": 2.238771438598633, "answers": [["United Kingdom"]], "f1 socre": 0}
+{"pred": ["All-American was born before Lagu Kenangan."], "TTFT": 1.9776480197906494, "answers": [["All-American Co-Ed"]], "f1 socre": 0.26666666666666666}
+{"pred": ["Born in Barcelona, Spain."], "TTFT": 2.3421642780303955, "answers": [["Buenos Aires"]], "f1 socre": 0}
+{"pred": ["Marie Alixande of Holstein-Gustrow"], "TTFT": 2.1209917068481445, "answers": [["Charlotte Amalie of Hesse-Kassel"]], "f1 socre": 0.09523809523809525}
+{"pred": ["Died in Hungary."], "TTFT": 2.2134289741516113, "answers": [["Brunswick"]], "f1 socre": 0}
+{"pred": ["Fundania, daughter of Lucius Fundanius Lamia, is Marcus Annius Libo's aunt."], "TTFT": 2.1004559993743896, "answers": [["Vibia Sabina"]], "f1 socre": 0.07692307692307693}
+{"pred": ["Riding The California Trail (2013)"], "TTFT": 1.883424997329712, "answers": [["Bajo Otro Sol"]], "f1 socre": 0}
+{"pred": ["Gurpreet Kaur Saxena."], "TTFT": 1.9303550720214844, "answers": [["Marie Lafor\u00eat"]], "f1 socre": 0}
+{"pred": ["Jack Clayton, daughter of Lana Turner, is the spouse of the director of \"Streets of Blood.\""], "TTFT": 2.3224241733551025, "answers": [["Sandra Nelson"]], "f1 socre": 0}
+{"pred": ["Born 1695."], "TTFT": 2.1744673252105713, "answers": [["May 19, 1669"]], "f1 socre": 0.5333333333333333}
+{"pred": ["The mother of Sancha of Castile, Queen of Navarre, died in Palencia."], "TTFT": 1.8514056205749512, "answers": [["Palencia"]], "f1 socre": 0.21052631578947367}
+{"pred": ["Dance With A Stranger (2003)"], "TTFT": 2.42588472366333, "answers": [["Miley Naa Miley Hum"]], "f1 socre": 0}
+{"pred": ["Tom Mix is older. (Born: 1887, Space Probe Taurus: 1950)"], "TTFT": 2.3683512210845947, "answers": [["Tom Mix In Arabia"]], "f1 socre": 0.16}
+{"pred": ["Seven in the Sun (director died)."], "TTFT": 2.356767416000366, "answers": [["Seven In The Sun"]], "f1 socre": 0.7499999999999999}
+{"pred": ["Dr. Socrates was released first."], "TTFT": 2.5754592418670654, "answers": [["Dr. Socrates"]], "f1 socre": 0.7272727272727273}
+{"pred": ["Woman in the Moon (1929) was directed by Fritz Lang. Chang:ELAND (1984) was directed by George Schaefer."], "TTFT": 2.0322914123535156, "answers": [["Changeland"]], "f1 socre": 0.12903225806451613}
+{"pred": ["Peter Rosegger is younger than Ruel Redinger."], "TTFT": 2.2982656955718994, "answers": [["Ruel Redinger"]], "f1 socre": 0.5}
+{"pred": ["Alexandra Kolosova, daughter of Pyotr Karatygin's mother, is his sibling-in-law."], "TTFT": 2.5050878524780273, "answers": [["Alexandra Kolosova"]], "f1 socre": 0.42857142857142855}
+{"pred": ["Waylon Jennings's spouse during the time of \"This Time\" was Jessi Colter."], "TTFT": 1.9692723751068115, "answers": [["Jessi Colter"]], "f1 socre": 0.4347826086956522}
+{"pred": ["Yes, Twin Cairns and Nova Zembla are in the same country (Australia)."], "TTFT": 2.0896239280700684, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Erich Haenisch died first."], "TTFT": 2.198371171951294, "answers": [["William Pooley"]], "f1 socre": 0}
+{"pred": ["The performer is Luxembourgish."], "TTFT": 2.135808229446411, "answers": [["Sweden"]], "f1 socre": 0}
+{"pred": ["Nick Varner is American. Carl Duser is Swedish. Therefore, they do not share the same nationality."], "TTFT": 2.3162262439727783, "answers": [["yes"]], "f1 socre": 0}
+{"pred": ["Melody of the World (1931) director died earlier."], "TTFT": 2.079342842102051, "answers": [["Melody Of The World"]], "f1 socre": 0.5}
+{"pred": ["Cemetery in Paris."], "TTFT": 2.2420222759246826, "answers": [["Madrid"]], "f1 socre": 0}
+{"pred": ["I. Barry, Ian is the mother of Atomised (Ian Barry) director."], "TTFT": 2.1328437328338623, "answers": [["Gisela Elsner"]], "f1 socre": 0}
+{"pred": ["The Great Man's Lady and La Belle Am\u00e9ricaine are both films directed by Jean-Luc Godard. The Great Man's Lady was released in 1956 and starred Jean-Louis Trintignant and Mich\u00e8le Mercier. La Belle Am\u00e9ricaine was released in 1960 and starred Jean-Paul Belmondo and Mich\u00e8le Mercier. Jean-Luc Godard died in 2021."], "TTFT": 2.305666446685791, "answers": [["La Belle Am\u00e9ricaine"]], "f1 socre": 0.10204081632653061}
+{"pred": ["Born in Switzerland."], "TTFT": 2.0444271564483643, "answers": [["Oklahoma City, Oklahoma"]], "f1 socre": 0}
+{"pred": ["She died in a hospital in Dubai."], "TTFT": 2.1649765968322754, "answers": [["Dubai"]], "f1 socre": 0.4444444444444445}
+{"pred": ["Born in Germany."], "TTFT": 2.0842182636260986, "answers": [["La Trinit\u00e9"]], "f1 socre": 0}
+{"pred": ["Duke Frederick III of Mecklenburg-Schwerin"], "TTFT": 2.1301445960998535, "answers": [["Prince Albert of Prussia"]], "f1 socre": 0.09523809523809522}
+{"pred": ["No, they are in different countries."], "TTFT": 2.0601248741149902, "answers": [["yes"]], "f1 socre": 0}
+{"pred": ["Ostergotland."], "TTFT": 1.9754142761230469, "answers": [["Banbury"]], "f1 socre": 0}
+{"pred": ["Sir John Wodehouse"], "TTFT": 2.5350465774536133, "answers": [["Sir Paul Gore, 1st Baronet"]], "f1 socre": 0.11764705882352942}
+{"pred": ["Kazakhstan"], "TTFT": 1.8089759349822998, "answers": [["Fatimid caliphate"]], "f1 socre": 0}
+{"pred": ["Born: January 20, 1913 (Felicia Welby)"], "TTFT": 2.4682960510253906, "answers": [["Dayton, Ohio"]], "f1 socre": 0}
+{"pred": ["The spouse of Ann Carver is Peter Judson."], "TTFT": 2.3461427688598633, "answers": [["Ona Munson"]], "f1 socre": 0.13333333333333333}
+{"pred": ["The Drover's Sweetheart came out earlier. (1935)"], "TTFT": 2.214570999145508, "answers": [["The Drover'S Sweetheart"]], "f1 socre": 0.5}
+{"pred": ["Chakwal, Pakistan."], "TTFT": 2.660170316696167, "answers": [["Tumkur"]], "f1 socre": 0}
+{"pred": ["Trains came out earlier. (1975)"], "TTFT": 2.3435914516448975, "answers": [["Det Sande Ansigt"]], "f1 socre": 0}
+{"pred": ["Il Gaucho died earlier."], "TTFT": 2.3453550338745117, "answers": [["Bomgay"]], "f1 socre": 0}
+{"pred": ["Maria's husband, Boris I of Bulgaria, died in Sharon, Connecticut."], "TTFT": 2.5170390605926514, "answers": [["Preslav"]], "f1 socre": 0}
+{"pred": ["The Pyrammmid came out first."], "TTFT": 1.8752763271331787, "answers": [["Revolt Of The Praetorians"]], "f1 socre": 0}
+{"pred": ["Both directors are French."], "TTFT": 2.139971971511841, "answers": [["yes"]], "f1 socre": 0}
+{"pred": ["Constantia Eriksdotter's father died in 1463."], "TTFT": 2.222040891647339, "answers": [["poisoning"]], "f1 socre": 0}
+{"pred": ["The director is German."], "TTFT": 2.0657811164855957, "answers": [["America"]], "f1 socre": 0}
+{"pred": ["Lahabi."], "TTFT": 2.119668483734131, "answers": [["Kingdom of Hawaii"]], "f1 socre": 0.2222222222222222}
+{"pred": ["X-Paroni came out earlier."], "TTFT": 2.1768665313720703, "answers": [["X-Paroni"]], "f1 socre": 0.6666666666666666}
+{"pred": ["August Underground (1961) was released earlier."], "TTFT": 2.0881171226501465, "answers": [["Vasantha Raagam"]], "f1 socre": 0}
+{"pred": ["The father-in-law of Hong Ra-Hee is Hyun Boin, the grandfather of Hong Ra-Hee."], "TTFT": 2.6954846382141113, "answers": [["Lee Byung-chul"]], "f1 socre": 0.07407407407407407}
+{"pred": ["Henry II, Count of Bourbon."], "TTFT": 2.0501456260681152, "answers": [["John I, Duke of Bourbon"]], "f1 socre": 0.39999999999999997}
+{"pred": ["The father of Duleep Singh died in 1839."], "TTFT": 2.1949679851531982, "answers": [["27 June 1839"]], "f1 socre": 0.41666666666666663}
+{"pred": ["Born in Switzerland."], "TTFT": 2.7995526790618896, "answers": [["Gura Humorului"]], "f1 socre": 0}
+{"pred": ["Jacques Dutronc's wife, Caterina de' Medici, is the spouse of the performer of the song \"Et Moi, Et Moi, Et Moi.\""], "TTFT": 2.0444746017456055, "answers": [["Fran\u00e7oise Hardy"]], "f1 socre": 0}
+{"pred": ["Jean-Claude Lauzon lived longer. (He died in 1997 and his wife Mathilde died in 1986.)"], "TTFT": 2.17567777633667, "answers": [["Charles Wheatstone"]], "f1 socre": 0}
+{"pred": ["Plashey castle, Essex."], "TTFT": 1.942997932434082, "answers": [["Washington"]], "f1 socre": 0}
+{"pred": ["Our Agent Tiger: 1955, London Melody: 1977."], "TTFT": 2.26763653755188, "answers": [["London Melody"]], "f1 socre": 0.3636363636363636}
+{"pred": ["Fernando, son of Gundemaro Piniolo, is the paternal grandfather of Diego Fern\u00e1ndez Oviedo."], "TTFT": 2.161132574081421, "answers": [["Fla\u00edn Mu\u00f1oz"]], "f1 socre": 0}
+{"pred": ["J. Cohen (dana Blankstein)"], "TTFT": 2.1653566360473633, "answers": [["Mira Sorvino"]], "f1 socre": 0}
+{"pred": ["Yes, they are Swedish."], "TTFT": 2.3257243633270264, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Denmark."], "TTFT": 2.2021548748016357, "answers": [["Norway"]], "f1 socre": 0}
+{"pred": ["The cause of Heonjong of Goryeo's father's death is unknown."], "TTFT": 2.4626212120056152, "answers": [["illness"]], "f1 socre": 0}
+{"pred": ["The mother of Mary of Woodstock died in the 14th century."], "TTFT": 2.0433571338653564, "answers": [["Harby"]], "f1 socre": 0}
+{"pred": ["The director earned the best director award (1991) and best fiction film award (1991) for the film Tiramisu (2002)."], "TTFT": 2.0641510486602783, "answers": [["Hong Kong Film Award for Best Director"]], "f1 socre": 0.25}
+{"pred": ["The director of the film Nallavan Vazhvan died on 30 November 1985."], "TTFT": 1.9812796115875244, "answers": [["3 September 1992"]], "f1 socre": 0.3448275862068965}
+{"pred": ["Frederick Cleveland died first, in 1825. Nathaniel McLenaghan died later, in 1917."], "TTFT": 1.9622468948364258, "answers": [["Nathaniel Mclenaghan"]], "f1 socre": 0.4210526315789474}
+{"pred": ["The director of Balls Out (2014 Film) graduated from New York University."], "TTFT": 2.0278491973876953, "answers": [["Tisch"]], "f1 socre": 0}
+{"pred": ["Cuchillos De Fuego's director is younger."], "TTFT": 2.2468252182006836, "answers": [["Cuchillos De Fuego"]], "f1 socre": 0.7058823529411764}
+{"pred": ["The Ballad Of Josie was released earlier."], "TTFT": 2.24839186668396, "answers": [["Moment Of Danger"]], "f1 socre": 0.16666666666666666}
+{"pred": ["The Women's Suffrage Journal was established first."], "TTFT": 1.9840693473815918, "answers": [["De As"]], "f1 socre": 0}
+{"pred": ["The Piper's Price director died first. (1938)"], "TTFT": 2.0998494625091553, "answers": [["The Piper'S Price"]], "f1 socre": 0.42857142857142855}
+{"pred": ["Yes, both are Canadian."], "TTFT": 1.9963555335998535, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["The mother of Antoine Philippe, Duke of Montpensier, was born in 1751."], "TTFT": 2.695143222808838, "answers": [["13 March 1753"]], "f1 socre": 0.3125}
+{"pred": ["True To The Navy - Chester Ericson died after its release."], "TTFT": 1.9167530536651611, "answers": [["No Trees In The Street"]], "f1 socre": 0}
+{"pred": ["Born in Switzerland."], "TTFT": 2.0796468257904053, "answers": [["Methala"]], "f1 socre": 0}
+{"pred": ["Night of Dark Shadows (1971) came out earlier."], "TTFT": 1.8573873043060303, "answers": [["Alkohol"]], "f1 socre": 0}
+{"pred": ["Do Musafir is younger."], "TTFT": 2.2824866771698, "answers": [["Do Musafir"]], "f1 socre": 0.8}
+{"pred": ["Yes, both films are from Italy."], "TTFT": 2.111524820327759, "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Born in Russia."], "TTFT": 2.0561089515686035, "answers": [["New York"]], "f1 socre": 0}
+{"pred": ["Tiger in the Smoke - directed by Sergio Bergonzelly."], "TTFT": 2.059478521347046, "answers": [["Contragolpe"]], "f1 socre": 0}
+{"pred": ["The director of Jail Yatra died in Berlin, Germany."], "TTFT": 1.8569345474243164, "answers": [["Mumbai"]], "f1 socre": 0}
+{"pred": ["The Comedians of Comedy came out first."], "TTFT": 2.173879623413086, "answers": [["The Comedians Of Comedy"]], "f1 socre": 0.7272727272727273}
+{"pred": ["Tombstone Rashomon (1953)"], "TTFT": 1.8906700611114502, "answers": [["Tombstone Rashomon"]], "f1 socre": 0.6666666666666666}
+{"pred": ["Dhuen Ki Lakeer was born earlier."], "TTFT": 2.0036191940307617, "answers": [["Dhuen Ki Lakeer"]], "f1 socre": 0.8}
+{"pred": ["Perd\u00f3n was born first."], "TTFT": 2.0056095123291016, "answers": [["Perd\u00f3n, Viejita"]], "f1 socre": 0.4000000000000001}
+{"pred": ["The director of American Gothic (2007 Film) graduated from Williams College."], "TTFT": 2.2456393241882324, "answers": [["University of Wisconsin"]], "f1 socre": 0.0909090909090909}
+{"pred": ["Dudley Russell was born first."], "TTFT": 2.429192066192627, "answers": [["Dudley Russell"]], "f1 socre": 0.7692307692307693}
+{"pred": ["Vytautas was born first."], "TTFT": 2.006470203399658, "answers": [["Mirjam Polkunen"]], "f1 socre": 0}
+{"pred": ["Father of Grand Duchess Elena Vladimirovna of Russia was Tsar Paul I."], "TTFT": 2.202094793319702, "answers": [["Saint Petersburg"]], "f1 socre": 0.07407407407407408}
+{"pred": ["Born in the US."], "TTFT": 1.8621742725372314, "answers": [["Eindhoven"]], "f1 socre": 0}
+{"pred": ["Women's Suffrage Journal was established before Mostar (Magazine)."], "TTFT": 1.8570265769958496, "answers": [["Women'S Suffrage Journal"]], "f1 socre": 0.625}
+{"pred": ["Carrie Watson Fleming's husband was born in England."], "TTFT": 1.8762240409851074, "answers": [["Fairmont, West Virginia"]], "f1 socre": 0}
+{"pred": ["The director of The Market of Souls is Lenzi. He died in 1984."], "TTFT": 1.9872972965240479, "answers": [["The Market Of Souls"]], "f1 socre": 0.3157894736842105}
+{"pred": ["Yes, both directors are from the same country (France)."], "TTFT": 2.1424856185913086, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["The father of Muhammad Al-Nasir was Abdullah."], "TTFT": 2.403825283050537, "answers": [["Morocco"]], "f1 socre": 0}
+{"pred": ["Ur, possibly during the Battle of Uruk."], "TTFT": 1.9716825485229492, "answers": [["Akkadian empire"]], "f1 socre": 0}
+{"pred": ["Solemn Promise (1956) director born first."], "TTFT": 1.950775384902954, "answers": [["Tarzan The Magnificent"]], "f1 socre": 0}
+{"pred": ["The Man with the Red Hat (1958) - Gordon is the director."], "TTFT": 2.13374662399292, "answers": [["Wolf Warrior"]], "f1 socre": 0}
+{"pred": ["Fujiwara, son of Fujiutsugu, is the paternal grandfather of Tr\u1ecbnh Doanh."], "TTFT": 2.126594305038452, "answers": [["Tr\u1ecbnh B\u00ednh"]], "f1 socre": 0.28571428571428575}
+{"pred": ["Born in Rybinsk, Russia."], "TTFT": 2.183849334716797, "answers": [["Gura Humorului"]], "f1 socre": 0}
+{"pred": ["Born in Wales."], "TTFT": 1.9734692573547363, "answers": [["Crenshaw"]], "f1 socre": 0}
+{"pred": ["Poveri Milionari is younger."], "TTFT": 2.282153367996216, "answers": [["Winter Sleepers"]], "f1 socre": 0}
+{"pred": ["The paternal grandfather of Bruno Ii Von Berg is Gun/Oghuz."], "TTFT": 2.1909005641937256, "answers": [["Adolf II of Berg"]], "f1 socre": 0.36363636363636365}
+{"pred": ["American."], "TTFT": 2.176893711090088, "answers": [["no"]], "f1 socre": 0}
+{"pred": ["Born in Switzerland."], "TTFT": 2.1330316066741943, "answers": [["M\u00fclheim an der Ruhr"]], "f1 socre": 0}
+{"pred": ["The Bag Man came out first. (1958)"], "TTFT": 2.4605391025543213, "answers": [["Una Prostituta Al Servizio Del Pubblico E In Regola Con Le Leggi Dello Stato"]], "f1 socre": 0}
+{"pred": ["Yes, both movies are filmed in the UK."], "TTFT": 2.768688917160034, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["The paternal grandfather of Dibyasambandh is Hubbah."], "TTFT": 2.178189992904663, "answers": [["Mongkut"]], "f1 socre": 0}
+{"pred": ["The grandmother of Charles Willoughby, 10th Baron Willoughby of Parham, is Lady Margaret Hole, daughter of Bishop George Hole."], "TTFT": 2.1471192836761475, "answers": [["Lady Frances Manners"]], "f1 socre": 0.05714285714285715}
+{"pred": ["Paris, France (for films and theatre)\nArte, France 5 (for television)"], "TTFT": 2.0571248531341553, "answers": [["Cahiers du cin\u00e9ma"]], "f1 socre": 0}
+{"pred": ["Born in Switzerland."], "TTFT": 1.9352858066558838, "answers": [["Newport, Wales"]], "f1 socre": 0}
+{"pred": ["Virginia."], "TTFT": 2.0607664585113525, "answers": [["Gordonsville, Virginia"]], "f1 socre": 0.6}
+{"pred": ["Romania"], "TTFT": 1.921670913696289, "answers": [["Mangalia"]], "f1 socre": 0}
+{"pred": ["Robert Corman."], "TTFT": 1.9145228862762451, "answers": [["F\u00e9lix Leclerc"]], "f1 socre": 0}
+{"pred": ["Jacques de Bourbon, Duke of Bourbon."], "TTFT": 2.0328869819641113, "answers": [["Jacques"]], "f1 socre": 0.42857142857142855}
+{"pred": ["The father-in-law of Gisela of Hungary is Duke Peter of Austria."], "TTFT": 1.985790491104126, "answers": [["G\u00e9za"]], "f1 socre": 0}
+{"pred": ["The grandmother of King Kang of Zhou is Hubba Inti, daughter of Hubba In."], "TTFT": 2.234931468963623, "answers": [["Yi Jiang"]], "f1 socre": 0.1818181818181818}
+{"pred": ["The mother of Maria Isabel de Alc\u00e2ntara died in 1807."], "TTFT": 1.8484876155853271, "answers": [["November 3, 1867"]], "f1 socre": 0.30769230769230765}
+{"pred": ["Rodney Steps is married to Piers Halliday."], "TTFT": 2.0792720317840576, "answers": [["Ivy Duke"]], "f1 socre": 0}
+{"pred": ["Died 1219."], "TTFT": 2.061636209487915, "answers": [["1 August 1813"]], "f1 socre": 0.42857142857142855}
+{"pred": ["Season of Strangers is older. (1950-1984)"], "TTFT": 1.9476807117462158, "answers": [["Season Of Strangers"]], "f1 socre": 0.35294117647058826}
+{"pred": ["Yes, both are American."], "TTFT": 1.9706687927246094, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Antoine Casavant was born before Abdul Ali Lalu."], "TTFT": 1.8849270343780518, "answers": [["Antoine Casavant"]], "f1 socre": 0.5714285714285715}
+{"pred": ["The passage does not provide information on where Rameshwari Nehru's husband graduated from."], "TTFT": 1.8997297286987305, "answers": [["Oxford"]], "f1 socre": 0}
+{"pred": ["Sir John Dalrymple's paternal grandfather is Sir John Wodehouse."], "TTFT": 2.109544515609741, "answers": [["Sir Hew Dalrymple, 2nd Baronet"]], "f1 socre": 0.2580645161290323}
+{"pred": ["Murderer in The Fog (1947) - Murderer in The Fog (1947) was directed by Eugen York.\n\nEugen York was born earlier (1908)."], "TTFT": 1.8272995948791504, "answers": [["Murderer In The Fog"]], "f1 socre": 0.2666666666666667}
+{"pred": ["Peter Judson Kirk."], "TTFT": 2.025092124938965, "answers": [["Milla"]], "f1 socre": 0}
+{"pred": ["Died in forest hill."], "TTFT": 2.1145477294921875, "answers": [["Lecce"]], "f1 socre": 0}
+{"pred": ["The director of Lady Magdalene's film received three awards."], "TTFT": 1.8241214752197266, "answers": [["Prometheus Award"]], "f1 socre": 0}
+{"pred": ["German."], "TTFT": 2.577465057373047, "answers": [["Duchy of Saxe-Gotha-Altenburg"]], "f1 socre": 0}
+{"pred": ["The Longshots director was born first."], "TTFT": 1.9211430549621582, "answers": [["Station For Two"]], "f1 socre": 0}
+{"pred": ["The father of Aleksey Greig was born in Hungary."], "TTFT": 1.5812938213348389, "answers": [["Inverkeithing"]], "f1 socre": 0.11764705882352941}
+{"pred": ["Thomas Of Galloway's father died around 1541."], "TTFT": 1.5391285419464111, "answers": [["1234"]], "f1 socre": 0.3157894736842105}
+{"pred": ["Robert Bertie, 3rd Earl of Lindsey's father died in 1701."], "TTFT": 1.7166399955749512, "answers": [["25 July 1666"]], "f1 socre": 0.18181818181818182}
+{"pred": ["The Wind Rider (1927)"], "TTFT": 1.598891019821167, "answers": [["The Wind'S Fierce"]], "f1 socre": 0}
+{"pred": ["Political pressure from Nazi Germany led to alterations in the film, resulting in critical failure."], "TTFT": 1.5107994079589844, "answers": [["drowning"]], "f1 socre": 0}
+{"pred": ["Cairo, Egypt."], "TTFT": 1.5152785778045654, "answers": [["Abu Dhabi"]], "f1 socre": 0}
+{"pred": ["Munich, Germany"], "TTFT": 1.7937700748443604, "answers": [["Prenzlau"]], "f1 socre": 0}
+{"pred": ["Born in Hungary."], "TTFT": 1.600435733795166, "answers": [["Pozna\u0144"]], "f1 socre": 0}
+{"pred": ["The father of Teobaldo Ii Ordelaffi was born in Leon."], "TTFT": 1.5873093605041504, "answers": [["Italy"]], "f1 socre": 0}
+{"pred": ["Born in Australia."], "TTFT": 1.6076502799987793, "answers": [["Toronto, Ontario"]], "f1 socre": 0}
+{"pred": ["Forbidden Daughters (1990)"], "TTFT": 1.5527935028076172, "answers": [["Forbidden Daughters"]], "f1 socre": 0.5454545454545454}
+{"pred": ["Yes, they are both French."], "TTFT": 1.594243049621582, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Bogdan \u021a\u0103ru\u0219 was born first."], "TTFT": 1.580488681793213, "answers": [["Bogdan \u021a\u0103ru\u0219"]], "f1 socre": 0.8}
+{"pred": ["Folgore died first."], "TTFT": 1.5348560810089111, "answers": [["Sandflow"]], "f1 socre": 0}
+{"pred": ["The Fast and the Furious (2001)"], "TTFT": 1.506704568862915, "answers": [["From Corleone To Brooklyn"]], "f1 socre": 0}
+{"pred": ["No, Howard Lake (British Columbia) is in Canada and North Buck Lake (Alberta) is in Canada but in different countries."], "TTFT": 1.523160457611084, "answers": [["yes"]], "f1 socre": 0}
+{"pred": ["Buried in Halifax, Nova Scotia."], "TTFT": 1.4592387676239014, "answers": [["Vienna"]], "f1 socre": 0}
+{"pred": ["Hugh Evelyn was born earlier."], "TTFT": 1.53053617477417, "answers": [["Johnny Ekstr\u00f6m"]], "f1 socre": 0}
+{"pred": ["Yes, both mountains are in Iran."], "TTFT": 1.3763339519500732, "answers": [["yes"]], "f1 socre": 1.0}
+{"pred": ["Elizabeth of Rhuddlan's father is Edward III, King of England."], "TTFT": 1.4712073802947998, "answers": [["England"]], "f1 socre": 0.19999999999999998}
+{"pred": ["The cause of death was not disclosed."], "TTFT": 1.4485931396484375, "answers": [["Parkinson"]], "f1 socre": 0}
+{"pred": ["John De Vere, Earl of Oxford."], "TTFT": 1.5394039154052734, "answers": [["Roger Mortimer, 1st Earl of March"]], "f1 socre": 0.28571428571428564}
+{"pred": ["Albertus died before Ali Dinar."], "TTFT": 1.4528398513793945, "answers": [["Albertus Seba"]], "f1 socre": 0.4615384615384615}
+{"pred": ["The maternal grandfather of Marie Louise is Philippe, Duke of Orl\u00e9ans."], "TTFT": 1.4934325218200684, "answers": [["Ferdinand I of the Two Sicilies"]], "f1 socre": 0.07142857142857142}
+{"pred": ["Italia-Germania 4-3 was released earlier."], "TTFT": 1.4625744819641113, "answers": [["Prince Of Arcadia"]], "f1 socre": 0}
+{"pred": ["Born in 1950."], "TTFT": 1.5808391571044922, "answers": [["Milan"]], "f1 socre": 0}
+{"pred": ["Born in Russia."], "TTFT": 1.4685392379760742, "answers": [["K\u00f6ln"]], "f1 socre": 0}
