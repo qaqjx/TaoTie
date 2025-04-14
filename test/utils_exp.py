@@ -94,7 +94,7 @@ def compute_rl(pred, gold):
     return rougeL
 
 def normalize_context(s):
-    s += SPECIAL_TOKENS
+    s = SPECIAL_TOKENS + s
     return s
 
 def combine_contexts(contexts):
@@ -131,7 +131,7 @@ def get_pred(
     indices = [idx for idx,input_id in enumerate(tokenized_prompt) if input_id == spec_id]
     hash_str = []
     if(len(indices) == 1):
-        hash_str.append(serialize_and_hash(tokenized_prompt[4 : -5]))
+        hash_str.append(serialize_and_hash(tokenized_prompt[indices[0] + 1 : -4]))
     else :
         for idx in range(0,len(indices),2):
             hash_str.append(serialize_and_hash(tokenized_prompt[indices[idx] + 1 : indices[idx + 1] ]))
@@ -149,7 +149,9 @@ def get_pred(
 
     model.cacheblend_indices = indices
     tokenized_prompt = tokenized_prompt[tokenized_prompt != spec_id]  
-        
+    
+    if model.is_blend == 2:
+        tokenized_prompt = tokenized_prompt[:-4]
     output = searcher.generate(
         input_ids = tokenized_prompt,
         max_length=max_gen,

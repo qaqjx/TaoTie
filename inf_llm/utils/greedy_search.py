@@ -46,53 +46,59 @@ class GreedySearch:
         if output:
             output_text = ""
 
-        self.model.model.is_blend = self.model.is_blend
+        self.model.model.is_blend = self.model.is_blend 
         # self.model.model.hash_str = self.model.hash_str
 
+        prompt_chunk = []
+        if self.model.is_blend == 1:
+            prompt_chunk.append((input_ids[:, :self.model.cacheblend_indices[0]],False))
+            for i in range(0, len(self.model.cacheblend_indices), 2):
+                if i > 0 and self.model.cacheblend_indices[i] != self.model.cacheblend_indices[i - 1]:
+                    prompt_chunk.append((input_ids[:, self.model.cacheblend_indices[i - 1]:self.model.cacheblend_indices[i]],False))
+                prompt_chunk.append((input_ids[:, self.model.cacheblend_indices[i]:self.model.cacheblend_indices[i + 1]],True))
+            prompt_chunk.append((input_ids[:, self.model.cacheblend_indices[-1]:-1],False))
+        elif self.model.is_blend == 2:
+            prompt_chunk.append((input_ids[:, :self.model.cacheblend_indices[0]],False))
+            prompt_chunk.append((input_ids[:, self.model.cacheblend_indices[-1]:],True))
+        else:
+            prompt_chunk.append((input_ids[:, :-1],False))
+
         start = time.time()  
+        hash_idx = -1
         for i in range(max_length + 1):
             if i == 0:
                 # prefill phase
                 if chunk_size is None:
                     chunk_size = input_ids.size(1)
+                # chunk-prefill
+                for prompt_inputs,blend_chunk in prompt_chunk:
+                    for st in range(0, prompt_inputs.size(1), chunk_size):
+                        ed = min(prompt_inputs.size(1) , st + chunk_size)
+
+                        cb_indices = []
+                        if self.model.is_blend == 1 and blend_chunk:
+                            if st == 0:
+                                hash_idx += 1
+
+                            cb_indices.append((st,ed))
+                            self.model.model.cacheblend_indices = cb_indices
+                        elif self.model.is_blend == 2 and blend_chunk:
+                            if ed == prompt_inputs.size(1):
+                                hash_idx += 1
+                            self.model.model.cacheblend_indices = self.model.cacheblend_indices
+                        else:
+                            self.model.model.cacheblend_indices = []
+                        self.model.model.hash_str = self.model.hash_str[hash_idx : hash_idx + 1]
+
+                        out = self.model(
+                            input_ids = prompt_inputs[:, st: ed],
+                            attention_mask = attention_mask[:, :ed],
+                            use_cache = True,
+                            return_dict = True,
+                            past_key_values = past_key_values
+                        )
+                        logits, past_key_values = out.logits, out.past_key_values
                 
-                # segmentation
-                for st in range(0, input_ids.size(1) - 1, chunk_size):
-                    seg_begin = time.time()
-                    ed = min(input_ids.size(1) - 1, st + chunk_size)
-                    cb_indices = []
-                    st_hash_idx = 10000000
-                    ed_hash_idx = 0
-                    if self.model.model.is_blend == 1:
-                        for i in range(len(self.model.hash_str)):
-                            if (self.model.cacheblend_indices[2 * i] > ed or self.model.cacheblend_indices[2 * i + 1] < st) is False:
-                                st_hash_idx = min(st_hash_idx,i)
-                                ed_hash_idx = max(ed_hash_idx,i)
-                                # find the slotting idx
-                                slot_st = max(self.model.cacheblend_indices[2 * i], st)
-                                slot_ed = min(self.model.cacheblend_indices[2 * i + 1], ed)
-                                cb_indices.append([slot_st - st, slot_ed - st, slot_st - self.model.cacheblend_indices[2 * i] , slot_ed - self.model.cacheblend_indices[2 * i]])
-                    
-                        self.model.model.cacheblend_indices = cb_indices
-                        self.model.model.hash_str = self.model.hash_str[st_hash_idx : ed_hash_idx + 1]
-                    else:
-                        self.model.model.cacheblend_indices = []
-                        self.model.model.hash_str = self.model.hash_str
-                    seg_divide = time.time()
-
-
-                    out = self.model(
-                        input_ids = input_ids[:, st: ed],
-                        attention_mask = attention_mask[:, :ed],
-                        use_cache = True,
-                        return_dict = True,
-                        past_key_values = past_key_values
-                    )
-                    logits, past_key_values = out.logits, out.past_key_values
-
-                    seg_end = time.time()
-                    # print("Segmentation divide time: ", seg_divide - seg_begin)
-                    # print("Segmentation prefill time: ", seg_end - seg_divide)
                 self.model.model.is_blend = 0
                 self.model.model.hash_str = []
 

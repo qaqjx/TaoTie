@@ -15,7 +15,7 @@ result_path_prefix = "/home/xujie/TaoTie/cb-bench/"
 
 if __name__ == '__main__':
     inf_llm_config_path = config_path + "config/mistral-inf-llm.yaml"
-    result_path = result_path_prefix + dataset + "/taotie-result.json"
+    result_path = result_path_prefix + dataset + "/taotie-result-test.json"
     from omegaconf import OmegaConf
     args = OmegaConf.load(inf_llm_config_path)  
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -30,16 +30,24 @@ if __name__ == '__main__':
     eval_dataset = load_dataset(dataset_path)
     results = []
     f1_scores = []
-    for ex in eval_dataset:
+    doc_str = dict()
+
+    for i,ex in enumerate(eval_dataset):
+
         answers = ex["answers"]
         doc_prompts, q_prompt = build_qa_prompt(ex, query_prompt)
         doc_chunk_ids = [(doc)[1:] for doc in doc_prompts]
         q_ids = (q_prompt)[1:]
 
         for prompt in doc_chunk_ids:
+            # print("length:", len(prompt))
             prompt = "[INST]" + normalize_context(prompt) + "[/INST]"
-            get_pred(model, tokenizer, prompt,
+            if prompt not in doc_str:
+                doc_str[prompt] = 1
+                get_pred(model, tokenizer, prompt,
                       args.max_len,1, verbose=True)
+            else:
+                continue
         
         # print("--------------------")
         doc_chunk_ids = prefix_prompt +  combine_contexts(doc_chunk_ids) + q_ids  
@@ -58,7 +66,7 @@ if __name__ == '__main__':
         }
         results.append(result)
         f1_scores.append(f1)
-        # break
+        # print(i)
 
     # print("F1 scores:", f1_scores)
     print("Average F1 score:", sum(f1_scores) / len(f1_scores))

@@ -47,7 +47,7 @@ def huggingface_forward(forward):
             self.hash_str,self.recompute_idx
         )
         if use_cache:
-            o, pkv = ret
+            o, pkv,self.recompute_idx = ret
         else:
             o = ret
             pkv = None
@@ -140,7 +140,8 @@ def patch_hf(
                 output_attentions=output_attentions,
                 use_cache=use_cache,   
             )
-
+            
+            recompute_idx = decoder_layer.self_attn.recompute_idx
             hidden_states = layer_outputs[0]
 
             if use_cache:

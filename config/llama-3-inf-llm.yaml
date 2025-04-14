@@ -3,8 +3,8 @@ model:
   path: meta-llama/Meta-Llama-3-8B-Instruct
   block_size: 128
   fattn: false
-  n_init: 128
-  n_local: 4096
+  n_init: 128 # store the init token 
+  n_local: 4096 # store the local token 
   topk: 16
   repr_topk: 4
   max_cached_block: 32
