@@ -103,9 +103,9 @@ def combine_contexts(contexts):
         combined +=  SPECIAL_TOKENS + context + SPECIAL_TOKENS
     return combined
 
-def get_model_and_tokenizer(config):
+def get_model_and_tokenizer(config,device):
     tokenizer = AutoTokenizer.from_pretrained(config.tokenizer_path)
-    model = AutoModelForCausalLM.from_pretrained(config.path, torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="cuda")
+    model = AutoModelForCausalLM.from_pretrained(config.path, torch_dtype=torch.bfloat16, trust_remote_code=True, device_map=device)
     model = patch_hf(model, config.type, **config)
     return model, tokenizer
 

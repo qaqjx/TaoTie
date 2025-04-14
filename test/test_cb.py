@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     if not hasattr(args.model, "tokenizer_path"):
       args.model.tokenizer_path = args.model.path
-    model, tokenizer = get_model_and_tokenizer(args.model)
+    model, tokenizer = get_model_and_tokenizer(args.model,device)
 
     while True:
       input_text = input("input: ")

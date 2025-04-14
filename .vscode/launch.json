@@ -35,15 +35,19 @@
       "request": "launch",
       "program": "test/taotie_wikimqa_s.py",
       "justMyCode": false,
-      "env": {
-        "CUDA_LAUNCH_BLOCKING": "1"
-      }
     },
     {
       "name": "test-cb",
       "type": "debugpy",
       "request": "launch",
       "program": "test/test_cb.py",
+      "justMyCode": false,
+    },
+    {
+      "name": "test-wiki",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "test/infllm_wikimqa_s.py",
       "justMyCode": false,
     }
   ]

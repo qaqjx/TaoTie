@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     if not hasattr(args.model, "tokenizer_path"):
       args.model.tokenizer_path = args.model.path
-    model, tokenizer = get_model_and_tokenizer(args.model)
+    model, tokenizer = get_model_and_tokenizer(args.model,device)
 
     dataset_path = config_path + "benchmark/data/inputs/" + dataset + ".json"
     
@@ -33,8 +33,6 @@ if __name__ == '__main__':
     doc_str = dict()
 
     for i,ex in enumerate(eval_dataset):
-        # if i < 4:
-        #     continue
 
         answers = ex["answers"]
         doc_prompts, q_prompt = build_qa_prompt(ex, query_prompt)
@@ -68,7 +66,7 @@ if __name__ == '__main__':
         }
         results.append(result)
         f1_scores.append(f1)
-        print(i)
+        print("-----------------------------------------id is" , i)
 
     # print("F1 scores:", f1_scores)
     print("Average F1 score:", sum(f1_scores) / len(f1_scores))

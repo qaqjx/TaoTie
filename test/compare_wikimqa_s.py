@@ -11,15 +11,15 @@ result_path_prefix = "/home/xujie/TaoTie/cb-bench/"
 if __name__ == '__main__':
     inf_llm_config_path = config_path + "config/mistral-inf-llm.yaml"
     infllm_result_path = result_path_prefix + dataset + "/result.json"
-    taotie_result_path = result_path_prefix + dataset + "/taotie-result-512.json"
+    taotie_result_path = result_path_prefix + dataset + "/taotie-result-512-k.json"
 
     from omegaconf import OmegaConf
     args = OmegaConf.load(inf_llm_config_path)  
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
     # define your model
     if not hasattr(args.model, "tokenizer_path"):
       args.model.tokenizer_path = args.model.path
-    model, tokenizer = get_model_and_tokenizer(args.model)
+    model, tokenizer = get_model_and_tokenizer(args.model,device)
 
     dataset_path = config_path + "benchmark/data/inputs/" + dataset + ".json"
     
