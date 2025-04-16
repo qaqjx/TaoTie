@@ -10,6 +10,15 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from inf_llm.utils.patch import SPECIAL_TOKENS
 import torch
 
+def load_data_jsonl(dataset_path):
+    print("Loading dataset:", dataset_path)
+    with open(dataset_path) as f:
+        data = []
+        for line in f:
+            if line.strip():  # Skip empty lines
+                data.append(json.loads(line))
+    return data
+
 def load_result(result_path):
     loaded_results = []
     with open(result_path, "r") as f:
@@ -69,7 +78,11 @@ def build_fewshot_prompt(example):
     q_prompt = f"{q}"
     return doc_prompts, q_prompt
 
+def delete_ignore_symbol(pred):
+    return pred.replace("\n", "").replace("\r", "")
+
 def compute_f1(a_pred, a_gold, tokenizer):
+    a_pred = delete_ignore_symbol(a_pred)
     a_pred = parse_generation(a_pred)
     gold_toks = tokenizer.encode(normalize_answer(a_gold))[1:]
     pred_toks = tokenizer.encode(normalize_answer(a_pred))[1:]

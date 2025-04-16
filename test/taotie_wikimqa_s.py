@@ -15,7 +15,7 @@ result_path_prefix = "/home/xujie/TaoTie/cb-bench/"
 
 if __name__ == '__main__':
     inf_llm_config_path = config_path + "config/mistral-inf-llm.yaml"
-    result_path = result_path_prefix + dataset + "/taotie-result-512-b.json"
+    result_path = result_path_prefix + dataset + "/taotie-result-wikiqa-512-k.json"
     from omegaconf import OmegaConf
     args = OmegaConf.load(inf_llm_config_path)  
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -39,15 +39,15 @@ if __name__ == '__main__':
         doc_chunk_ids = [(doc)[1:] for doc in doc_prompts]
         q_ids = (q_prompt)[1:]
 
-        # for prompt in doc_chunk_ids:
-        #     # print("length:", len(prompt))
-        #     prompt = "[INST]" + normalize_context(prompt) + "[/INST]"
-        #     if prompt not in doc_str:
-        #         doc_str[prompt] = 1
-        #         get_pred(model, tokenizer, prompt,
-        #               args.max_len,1, verbose=True)
-        #     else:
-        #         continue
+        for prompt in doc_chunk_ids:
+            # print("length:", len(prompt))
+            prompt = "[INST]" + normalize_context(prompt) + "[/INST]"
+            if prompt not in doc_str:
+                doc_str[prompt] = 1
+                get_pred(model, tokenizer, prompt,
+                      args.max_len,1, verbose=True)
+            else:
+                continue
         
         # print("--------------------")
         doc_chunk_ids = prefix_prompt +  combine_contexts(doc_chunk_ids) + q_ids  

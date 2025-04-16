@@ -1,1 +1,14 @@
-Loading dataset: /home/xujie/TaoTie/benchmark/data/inputs/wikimqa_s.json
+Loading dataset: /home/xujie/TaoTie/benchmark/data/loong/loong_process.jsonl
+Example: 
+
+We hope you will carefully study the provided papers and determine the citation relationships between them. Please follow the instructions below strictly to complete the task:
+
+#Specific Requirements:
+1. Reference: When a given paper mentions other provided papers, those other papers are considered as "references" for the given paper. To summarize in this specific context, references are about what the given paper is using.
+2. Citation: Conversely, when other provided papers mention the given paper in their works, the given paper is being "cited" by those other papers. To summarize in this specific context, citations are about who is using the given paper.
+3. Given a paper, you need to determine the citation or reference relationship between this paper and the other papers. Do not consider papers that are not provided.
+3. Please present the paper titles in a json format as follows: {{"Reference":["Reference Title 1", "Reference Title 2", ..., "Reference Title n"], "Citation":["Citation Title 1", "Citation Title 2", ..., "Citation Title n"]}}.
+4. If a paper does not have any references or citations, please leave the corresponding list empty, e.g.{{"Refernce":[]}}, {{"Citation":[]}}.
+
+#The paper you need to analyze:
+OpenMoE: An Early Effort on Open Mixture-of-Experts Language Models

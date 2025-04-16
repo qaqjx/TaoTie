@@ -80,7 +80,7 @@ def inf_llm_forward(
             if layer_idx > 1:
                 o = past_key_value.do_blend(h_q, h_k, h_v, recompute_idx, hash_str, cacheblend_indices, layer_idx)      
             elif layer_idx == 1:
-                o, recompute_idx = past_key_value.selective_recompute_block(
+                o, recompute_idx = past_key_value.selective_recompute_block_by_k_deviation(
                     local_q, local_k, local_v ,
                     global_q, global_k, global_v,
                     hash_str, cacheblend_indices, layer_idx

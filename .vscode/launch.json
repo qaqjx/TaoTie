@@ -49,6 +49,20 @@
       "request": "launch",
       "program": "test/infllm_wikimqa_s.py",
       "justMyCode": false,
+    },
+    {
+      "name": "test-loong",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "test/infllm_loong_1_4.py",
+      "justMyCode": false,
+    },
+    {
+      "name": "test-taotie-loong",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "test/taotie_loong_1_4.py",
+      "justMyCode": false,
     }
   ]
 }

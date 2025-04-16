@@ -2,6 +2,7 @@ __pycache__
 *.jsonl
 benchmark/data/inf*
 benchmark/data/long*
+benchmark/data/loong
 /infllm
 my-venv/
 kvcache/

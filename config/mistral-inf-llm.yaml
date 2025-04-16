@@ -1,10 +1,10 @@
 model:
   type: inf-llm
   path: mistralai/Mistral-7B-Instruct-v0.2
-  block_size: 128
-  n_init: 128
+  block_size: 512
+  n_init: 512
   n_local: 512
-  topk: 16
+  topk: 32
   repr_topk: 4
   max_cached_block: 32
   exc_block_size: 512

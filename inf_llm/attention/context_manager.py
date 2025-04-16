@@ -374,8 +374,7 @@ class ContextManager:
             self.calc_block_score = True
         else:
             self.calc_block_score = False
-
-        
+   
     def remove_lru_blocks(self, u, num_remove: Optional[int] = None, ignore_blocks = None):
         if num_remove is None:
             num_remove = len(self.cached_blocks[u]) - self.max_cached_block
@@ -396,21 +395,6 @@ class ContextManager:
 
             if removed >= num_remove:
                 return
-
-    def get_block_k(self, k, score):
-        assert isinstance(score, torch.Tensor)
-        assert k.dim() >= 2
-        k = self.from_group_kv(k)
-
-        
-        assert k.shape[:-1] == score.shape
-        # assert k.shape[-2] == self.block_size
-        
-        repr_topk = min(self.repr_topk, score.size(-1))
-        score_topk = score.topk(repr_topk, dim=-1).indices
-        assert score_topk.shape == (self.batch_size, self.num_heads, repr_topk)
-        ret = torch.gather(k, -2, score_topk[:, :, :, None].expand(self.batch_size, self.num_heads, repr_topk, self.dim_head))
-        return ret
 
     def from_group_kv(self, tensor):
         assert tensor.dim() == 4 
@@ -510,7 +494,7 @@ class ContextManager:
             ret = []
             for u in range(self.batch_size):
                 ret.append(self.block_k[u].get_topk(global_h_q[u], self.topk))
-
+                     
         else:
             return self._cached_topk[self._topk_cur]
 
@@ -586,24 +570,6 @@ class ContextManager:
         global_h_k = global_h_k[:, :, :ed, :]
         global_h_v = global_h_v[:, :, :ed, :]
         return global_h_k, global_h_v, sliding_window, global_block_map, block_num
-
-    def update_block_score(
-        self, global_score: torch.FloatTensor, global_block_map, global_block_num
-    ):
-        if global_score is not None:
-            global_score = global_score[:, :, :global_block_num * self.block_size]
-            assert global_score.shape == (self.batch_size, self.num_heads, global_block_num * self.block_size)
-            global_score = global_score.view(self.batch_size, self.num_heads, global_block_num, self.block_size)
-            global_score = global_score.sum(dim=-1).sum(dim=1)
-            assert global_score.shape == (self.batch_size, global_block_num)
-            global_score = global_score.to(device='cpu', non_blocking=False) # (num_units, global_block_num)
-            for u in range(self.batch_size):
-                for k, v in self.cached_blocks[u].items():
-                    self.cached_blocks[u][k] = v * self.score_decay
-                score = global_score[u].tolist()
-                assert len(score) >= len(global_block_map[u])
-                for s, i in zip(score, global_block_map[u]):
-                    self.cached_blocks[u][i] += s
     
     def _append(
         self,
@@ -672,11 +638,6 @@ class ContextManager:
 
         if self.async_global_stream:
             GLOBAL_STREAM.wait_stream(torch.cuda.current_stream())
-
-        # update global score
-        with torch.cuda.stream(GLOBAL_STREAM):
-            self.update_block_score(glb_score, global_block_map, global_block_num)
-
 
         return o.view((self.batch_size, self.num_heads, -1, self.dim_head)), loc_score
 
@@ -772,24 +733,6 @@ class ContextManager:
                         shape = np.array(tensor.shape, dtype=np.int32)
                         f.write(shape.tobytes())  # Write shape
                         f.write(tensor.tobytes())  # Write raw data     
-
-    def blend(self, hash_str, indices, partial_k , partial_v , layer_idx):
-        # Load the global block data from the SSD
-        for i, hash_s in enumerate(hash_str):
-            idx = indices[i]
-            filename =  "kvcache/global_blocks_data" + str(hash_s) + "layer_"+ str(layer_idx) + ".bin"
-            # append to the current ctm 
-            start = time.time()
-            k, v = self.cpucache.get_kv(filename,idx[-2],idx[-1] )
-
-            k = k.to(partial_k.device)
-            v = v.to(partial_v.device)
-            end = time.time()
-            # print("load time: ", end - start )
-            # Insert the concatenated tensors into the correct positions in partial_k and partial_v
-            partial_k = torch.cat([partial_k[:,:,:idx[0],:], k , partial_k[: , : , idx[0]: , :]] ,dim = 2)  # Insert as a single-element batch
-            partial_v = torch.cat([partial_v[:,:,:idx[0],:], v , partial_v[: , : , idx[0]: , :]] ,dim = 2)  # Insert as a single-element batch   
-        return partial_k, partial_v
 
     def get_previous_kv(self, hash_str, layer_idx):
         # Load the global block data from the SSD
@@ -1196,8 +1139,8 @@ class ContextManager:
         recompute_block_num = int(np.ceil((repr_ed - repr_st) * recompute_ratio))
         _,topk_deviation = torch.topk(deviation, recompute_block_num, dim=0)
         topk_deviation = topk_deviation.view(-1).tolist()
-        for i in topk_deviation:
-            print("recompute block id", i)
+        # for i in topk_deviation:
+        #     print("recompute block id", i)
         recompute_idx = [idx * self.block_size + i for idx in topk_deviation for i in range(self.block_size) if idx * self.block_size + i < len_q]
         recompute_idx.sort()
         recompute_idx_tensor = torch.tensor(recompute_idx, dtype=torch.long, device=local_q.device)
@@ -1237,8 +1180,8 @@ class ContextManager:
         _,topk_deviation = torch.topk(torch.tensor(block_deviations), recompute_block_num, dim=0)
         topk_deviation = topk_deviation.view(-1).tolist()
 
-        for i in topk_deviation:
-            print("recompute block id", i)
+        # for i in topk_deviation:
+        #     print("recompute block id", i)
         recompute_idx = [idx * self.block_size + i for idx in topk_deviation for i in range(self.block_size) if idx * self.block_size + i < len_q]
         recompute_idx.sort()
         recompute_idx_tensor = torch.tensor(recompute_idx, dtype=torch.long, device=local_q.device)
