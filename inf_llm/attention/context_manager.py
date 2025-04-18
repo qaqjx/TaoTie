@@ -147,6 +147,21 @@ class CPUCache:
             concatenated_repr = torch.cat(all_repr_token, dim=-2)
         return concatenated_k.view(torch.bfloat16), concatenated_v.view(torch.bfloat16)
 
+class CPUMemoryUnit:
+    def __init__(
+        self,
+         kv: Tuple[torch.Tensor, torch.Tensor]
+    ):
+        if kv[0].is_cuda:
+            cpu_data = tuple(_t.contiguous().to("cpu", non_blocking=True) for _t in kv)
+        else:
+            cpu_data = tuple(_t.contiguous() for _t in kv)
+
+        self.cpu_data = cpu_data
+    
+    def get_data(self):
+        return self.cpu_data
+
 class MemoryUnit:
     def __init__(
         self, 
@@ -241,7 +256,6 @@ class MemoryUnit:
             self.cache.delete(self.gpu_data_id)
             self.gpu_data_id = None
 
-
 class VectorTensor:
     def __init__(
         self, 
@@ -299,7 +313,6 @@ class VectorTensor:
     def __len__(self):
         return self.length
 
-
 class Faiss:
     def __init__(self, hidden_size, element_dtype):
         import faiss
@@ -323,6 +336,85 @@ class Faiss:
     def __len__(self):
         return self.index.ntotal
 
+class CPUKVManager:
+    def __init__(self,
+                n_init,
+                n_local,
+                block_size,
+                topk,
+                exc_block_size
+    ):
+        self.length = 0
+        self.n_init = n_init
+        self.n_local = n_local
+        self.block_size = block_size
+        self.exc_block_size = exc_block_size
+        self.topk = topk
+
+    def init(self, query , key, value):
+        batch_size, num_heads, len_q, dim_head = query.shape
+        num_heads_kv = key.size(1)
+
+        self.batch_size = batch_size
+        self.num_heads = num_heads
+        self.dim_head = dim_head
+        self.num_heads_kv = num_heads_kv
+        
+        self.blocks = [[] for _ in range(self.batch_size)] # [[memory_unit]]
+
+        self.block_reprs = [VectorTensor(
+                dim_head * self.num_heads, query.dtype
+            ) for _ in range(self.batch_size)]
+        self.block_num = 0
+
+        self.remainder = (
+            torch.empty((self.batch_size, self.unit_size_kv, 0, dim_head), dtype=key.dtype, device="CPU"),
+            torch.empty((self.batch_size, self.unit_size_kv, 0, dim_head), dtype=value.dtype, device="CPU")
+        )
+
+    def append(self , key , value):
+        self.remainder = (
+            torch.cat((self.remainder[0] , key) , dim = -2),
+            torch.cat((self.remainder[1] , value) , dim = -2),
+        )
+
+        remainder_len = self.remainder[0].size(-2)
+        remainder_st = 0 
+        remainder_ed = remainder_len
+
+        current_block_num = self.block_num
+
+        while remainder_len - self.block_size >= self.n_local:
+            remainder_len =  remainder_len - self.block_size
+
+            for u in range(self.batch_size):
+                self.blocks[u].append((
+                    CPUMemoryUnit(
+                        (
+                            self.remainder[0][u , : , remainder_st: remainder_ed + self.block_size , :],
+                            self.remainder[1][u , : , remainder_st: remainder_ed + self.block_size , :]
+                        ) 
+                    )
+                ))
+
+            block_key = self.remainder[0][u , : , remainder_st: remainder_ed + self.block_size , :]
+            repr_keys= block_key.mean(dim = -2 , keepdim = False)
+            repr_keys = repr_keys.reshape(self.batch_size , self.num_heads * self.dim_head)
+
+            for u in range(self.batch_size):
+                self.block_reprs[u].append(repr_keys[u])
+            
+            self.block_num += 1
+
+            remainder_st += self.block_size
+
+
+        # return the new repr token
+        return self.block_reprs[0].get_data()[current_block_num: ]
+
+
+
+        
 
 GLOBAL_STREAM = None
 
@@ -362,6 +454,14 @@ class ContextManager:
         self.faiss = faiss
         self.perhead = perhead
         self.cpucache = CPUCache()
+
+        self.cpu_kv_manager = CPUKVManager(
+            self.n_init,
+            self.n_local,
+            self.block_size,
+            self.topk,
+            self.exc_block_size
+        )
 
         global GLOBAL_STREAM
         if self.async_global_stream and GLOBAL_STREAM is None:
@@ -452,9 +552,6 @@ class ContextManager:
             torch.empty((self.batch_size, self.unit_size_kv, 0, dim_head), dtype=global_k.dtype, device=global_k.device),
             torch.empty((self.batch_size, self.unit_size_kv, 0, dim_head), dtype=global_v.dtype, device=global_v.device),
         )
-
-        self.global_remainder_local_score = torch.empty((self.batch_size, self.num_heads, 0), dtype=global_k.dtype, device=global_k.device)
-
 
         self.init_k = torch.empty((self.batch_size, self.unit_size_kv, 0, dim_head), dtype=global_k.dtype, device=global_k.device)
         self.init_v = torch.empty((self.batch_size, self.unit_size_kv, 0, dim_head), dtype=global_k.dtype, device=global_k.device)
@@ -734,6 +831,40 @@ class ContextManager:
                         f.write(shape.tobytes())  # Write shape
                         f.write(tensor.tobytes())  # Write raw data     
 
+    def offload_offset(self , hash_str ,layer_idx , offset):
+        file_name =  "kvcache/global_blocks_data" + str(hash_str) + "layer_"+ str(layer_idx) + ".bin"
+        block_idx , block_offset = offset
+        with open(file_name, "wb") as f:
+            # store the repr token
+            repr_token_num = self.block_k[0].length
+            assert repr_token_num == len(self.global_blocks[0])
+
+            repr_token = self.block_k[0].get_data()[block_idx:]
+            repr_shape = np.array(repr_token.shape, dtype=np.int32)
+            f.write(repr_shape.tobytes())  # Write shape
+            f.write(repr_token.cpu().view(torch.int16).numpy().tobytes())  # Write raw data
+
+            # store the global block
+            f.write(np.array([self.batch_size, repr_token.size(0)], dtype=np.int32).tobytes())
+            # Iterate through each unit and block to serialize and store their data
+            for u in range(self.batch_size):
+                for i in range( block_idx , repr_token_num):
+                    memory_unit = self.global_blocks[u][i]
+                    # Extract tensors from the MemoryUnit
+
+                    if i == block_idx:
+                        kv_0 = memory_unit.cpu_data[0][block_offset:].cpu().view(torch.int16).numpy()
+                        kv_1 = memory_unit.cpu_data[1][block_offset:].cpu().view(torch.int16).numpy()
+                    else:
+                        kv_0 = memory_unit.cpu_data[0].cpu().view(torch.int16).numpy()  # First tensor (move to CPU if on GPU)
+                        kv_1 = memory_unit.cpu_data[1].cpu().view(torch.int16).numpy()  # Second tensor (move to CPU if on GPU)
+                        
+                    # Serialize the shape and data of each tensor
+                    for tensor in [kv_0, kv_1]:
+                        shape = np.array(tensor.shape, dtype=np.int32)
+                        f.write(shape.tobytes())  # Write shape
+                        f.write(tensor.tobytes())  # Write raw data     
+
     def get_previous_kv(self, hash_str, layer_idx):
         # Load the global block data from the SSD
         filename =  "kvcache/global_blocks_data" + str(hash_str) + "layer_"+ str(layer_idx) + ".bin"
@@ -746,16 +877,10 @@ class ContextManager:
 
         global_remainder_ed = self._global_remainder_ed + exc_length
         global_remainder_st = self._global_remainder_st
-
         global_remainder_len = global_remainder_ed - global_remainder_st
 
-        assert local_score.shape[:3] == (self.batch_size, self.num_heads, kv_length)
-        local_score = local_score[:, :, -exc_length-self.n_local:]
-
-        # compute the block score
-        self.global_remainder_local_score[:, :, global_remainder_ed-local_score.size(-1):global_remainder_ed].add_(local_score)
-        
-        if not self.init_exc and global_remainder_len > self.n_local:
+        # init
+        if not self.init_exc and global_remainder_len > self.n_local :
             global_k = self.global_remainder[0]
             global_v = self.global_remainder[1]
 
@@ -769,6 +894,9 @@ class ContextManager:
             self.init_v = torch.cat(
                 (self.init_v, global_v[:, :, global_remainder_st:global_remainder_st + append_init_len, :]), dim=-2
             )
+
+
+
             global_remainder_st += append_init_len
             global_remainder_len -= append_init_len
 
@@ -790,15 +918,9 @@ class ContextManager:
                     )
                 ))
 
-            # global_block_k = self.get_block_k(
-            #     self.global_remainder[0][:, :, global_remainder_st:global_remainder_st + self.block_size, :],
-            #     self.global_remainder_local_score[:, :, global_remainder_st:global_remainder_st + self.block_size]
-            # )
-
             global_block_k = self.global_remainder[0][:, :, global_remainder_st:global_remainder_st + self.block_size, :]
             global_block_k = self.from_group_kv(global_block_k)
             # repr_token 
-            # assert global_block_k.shape == (self.batch_size, self.num_heads, self.repr_topk, self.dim_head)
             global_block_k = global_block_k.mean(dim=-2, keepdim=False)
             global_block_k = global_block_k.reshape(self.batch_size, self.num_heads * self.dim_head)
             global_block_k = global_block_k[:, None, :]
@@ -813,14 +935,12 @@ class ContextManager:
 
     def flush_loacl_to_block(self):
         assert self.num_global_block == self.block_k[0].length
-        
         if self.async_global_stream:
             GLOBAL_STREAM.wait_stream(torch.cuda.current_stream())
 
         if self.global_remainder[0].size(-2) > 0:
             global_remainder_len = self._global_remainder_ed - self._global_remainder_st
             assert global_remainder_len == self.global_remainder[0].size(-2)
-            assert global_remainder_len == self.global_remainder_local_score.size(-1)
 
             while global_remainder_len > 0:
                 unit_size = min(self.block_size, global_remainder_len)
@@ -843,12 +963,7 @@ class ContextManager:
                         global_block_k = self.global_remainder[0][:, :, self._global_remainder_st:self._global_remainder_st + unit_size, :]
                         global_block_k = self.from_group_kv(global_block_k)
 
-                        # global_block_k = self.get_block_k(
-                        #     self.global_remainder[0][:, :, self._global_remainder_st:self._global_remainder_st + unit_size, :],
-                        #     self.global_remainder_local_score[:, :, self._global_remainder_st:self._global_remainder_st + unit_size]
-                        # )
                         # repr_token
-                        # assert global_block_k.shape == (self.batch_size, self.num_heads, self.repr_topk, self.dim_head)
                         global_block_k = global_block_k.mean(dim=-2, keepdim=False)
                         global_block_k = global_block_k.reshape(self.batch_size, self.num_heads * self.dim_head)
                         global_block_k = global_block_k[:, None, :]
@@ -864,7 +979,6 @@ class ContextManager:
 
             # update the global remainder and clear the local cache
             with torch.cuda.stream(GLOBAL_STREAM):
-
                 # update the local kv 
                 self.local_k = self.local_k[:, :, :-0, :]
                 self.local_v = self.local_v[:, :, :-0, :]
@@ -873,7 +987,6 @@ class ContextManager:
                     self.global_remainder[0][:, :, :-0, :],
                     self.global_remainder[1][:, :, :-0, :]
                 )
-                self.global_remainder_local_score = self.global_remainder_local_score[:, :, :-0]
                 self._global_remainder_ed = 0
                 self._global_remainder_st = 0
             
@@ -883,6 +996,11 @@ class ContextManager:
         self.init_exc = True
         return self.block_k[0].length
       
+    def get_cache_offset(self):
+        block_offset =  self.global_remainder[0].size(-2) 
+        block_idx = self.global_blocks[0]
+        return block_idx, block_offset
+
     def do_blend(self, rc_q, rc_k, rc_v, rc_idx, hash_str, indices, layer_idx):
         # 1. flush the local cache to global cache
         self.flush_loacl_to_block()
@@ -923,11 +1041,17 @@ class ContextManager:
             block_idx = rc_idx[i] // self.block_size
             block_ed = min(len(rc_idx), i + self.block_size)
 
+            is_flush = False
             while append_idx < block_idx:
+                if is_flush is False:
+                    is_flush = True
+                    self.flush_loacl_to_block()
                 self.global_blocks[0].append(append_unit[append_idx])
                 self.block_k[0].append(append_unit_repr[append_idx])
                 append_idx += 1
                 self.num_global_block += 1
+
+            # load the 
 
             # recompute current block
             local_q = rc_q[:, :, i:block_ed, :]
@@ -936,21 +1060,20 @@ class ContextManager:
             global_q = rc_q[:, :, i:block_ed, :]
             global_k = rc_k[:, :, i:block_ed, :]
             global_v = rc_v[:, :, i:block_ed, :]
-            
+    
             # store the recompute kv cache to global cache
             with torch.cuda.stream(GLOBAL_STREAM):
                 global_q = self.position_embedding.apply_rotary_pos_emb_one_angle(
                     global_q, self.n_local
                 )
 
+            # todo recover the local kv cache
             block_o = self.append(
                 local_q, local_k, local_v,
                 global_q, global_k, global_v,
             )
             o_list.append(block_o)
 
-            self.flush_loacl_to_block()
-            
             # todo update the repr token
             # self.block_k[0].update_back(append_unit_repr[block_idx])
             append_idx += 1
@@ -1003,11 +1126,6 @@ class ContextManager:
         
         if self.async_global_stream:
             GLOBAL_STREAM.wait_stream(torch.cuda.current_stream())
-        
-        # TODO: 
-        # 1. flush the local cache to global cache
-        # 2. retreve the kvcache from ssd
-        # 3. load the kvcache to global cache 
 
         # append local and global tensor
         self.local_k = torch.cat((self.local_k, local_k), dim=-2)
@@ -1022,16 +1140,6 @@ class ContextManager:
             self.global_remainder = (
                 torch.cat((self.global_remainder[0], global_k), dim=-2),
                 torch.cat((self.global_remainder[1], global_v), dim=-2),
-            )
-
-            self.global_remainder_local_score = torch.cat(
-                (self.global_remainder_local_score, 
-                torch.zeros(
-                        (self.batch_size, self.num_heads, global_k.size(-2)),
-                        dtype=global_k.dtype, device=global_k.device
-                    )
-                ),
-                dim=-1
             )
 
         with torch.cuda.stream(GLOBAL_STREAM):
@@ -1090,13 +1198,11 @@ class ContextManager:
             self.local_k = self.local_k[:, :, -self.n_local:, :]
             self.local_v = self.local_v[:, :, -self.n_local:, :]
 
-        assert self._global_remainder_ed == self.global_remainder[0].size(-2)
         with torch.cuda.stream(GLOBAL_STREAM):
             self.global_remainder = (
                 self.global_remainder[0][:, :, self._global_remainder_st:, :],
                 self.global_remainder[1][:, :, self._global_remainder_st:, :]
             )
-            self.global_remainder_local_score = self.global_remainder_local_score[:, :, self._global_remainder_st:]
             self._global_remainder_st = 0
             self._global_remainder_ed = self.global_remainder[0].size(-2)
             assert self._global_remainder_ed - self._global_remainder_st == self.global_remainder[0].size(-2)
@@ -1162,6 +1268,11 @@ class ContextManager:
         filename =  "kvcache/global_blocks_data" + str(hash_str) + "layer_"+ str(layer_idx) + ".bin"
 
         key = self.cpucache.get_memory_k(filename, indices[0])
+        # if self.global_remainder[0].size(-2) > 0:
+        #     partial_block_len = self.block_size - self.global_remainder[0].size(-2)
+        #     partial_idx = [i for i in range(partial_block_len)]
+        #     key = key[:, partial_block_len:, :]
+
         key = key.reshape(local_k.shape).to(local_q.device)
         repr_st = indices[0][-2] // self.block_size
         repr_ed = (indices[0][-1] + self.block_size - 1) // self.block_size 

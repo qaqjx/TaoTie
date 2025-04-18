@@ -87,7 +87,6 @@ def inf_llm_forward(
                 )
         else:
             # how to store the kv cache
-            # store the kv cache of precompute pharse
 
             if is_blend == 2:
                 block_st = past_key_value.flush_loacl_to_block()

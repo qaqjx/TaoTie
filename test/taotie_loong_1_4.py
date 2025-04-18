@@ -13,19 +13,7 @@ result_path = result_path_prefix  + "1_4_result-taotie.json"
 dataset_path = config_path + "benchmark/data/loong/" + dataset + ".jsonl"
 
 def clean_json(data):
-    """
-    清理 JSON 数据中的字符串：
-    1. 去掉所有字符串中的 '#' 符号。
-    2. 去掉字符串首尾的多余空格。
-    
-    参数:
-        data (dict | list): 输入的 JSON 数据（可以是字典或列表）。
-    
-    返回:
-        dict | list: 清理后的 JSON 数据。
-    """
     def clean_string(s):
-        """清理单个字符串：去掉 '#' 和首尾空格"""
         return s.replace("#", "").strip() if isinstance(s, str) else s
 
     if isinstance(data, dict):  # 如果是字典，递归处理每个值
